@@ -148,7 +148,7 @@ export const Navbar: React.FC = () => {
         <div className="container mx-auto px-4 py-3">
           <div className="flex items-center justify-between">
             <Link to="/" className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
-             Foundrr.co
+             Foundrr
             </Link>
             <div className="space-x-4">
               <Link to="/login" className="text-gray-600 hover:text-purple-600 transition-colors">
@@ -170,7 +170,7 @@ export const Navbar: React.FC = () => {
         <div className="container mx-auto px-4 py-3">
           <div className="flex items-center justify-between">
             <Link to="/" className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
-             Foundrr.co
+             Foundrr
             </Link>
             {/* Desktop menu */}
             <div className="hidden md:flex items-center space-x-6">
