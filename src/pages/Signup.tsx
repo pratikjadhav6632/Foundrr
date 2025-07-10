@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { useAuth } from '../contexts/AuthContext';
 import { toast } from 'react-hot-toast';
 import { User, Mail, Lock, Eye, EyeOff, AlertCircle, Phone } from 'lucide-react';
+import { authService } from '../services/authService';
 
 export const Signup: React.FC = () => {
   const [username, setUsername] = useState('');
@@ -12,6 +13,9 @@ export const Signup: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [mobile, setMobile] = useState('');
+  const [otpSent, setOtpSent] = useState(false);
+  const [otpUserId, setOtpUserId] = useState<string | null>(null);
+  const [otpPhone, setOtpPhone] = useState<string | null>(null);
   const { signup, connectionStatus } = useAuth();
   const navigate = useNavigate();
 
@@ -36,9 +40,13 @@ export const Signup: React.FC = () => {
       return;
     }
     try {
-      await signup(username, email, password, mobile);
-      toast.success('Account created! Please check your email to verify your account.');
-      navigate('/');
+      // Send OTP to email
+      const { userId } = await authService.sendEmailOtp(email);
+      setOtpSent(true);
+      setOtpUserId(userId);
+      toast.success('OTP sent to your email!');
+      // Redirect to OTP verification page, pass userId and email as state
+      navigate('/otp-verification', { state: { userId, email, username, password, mobile } });
     } catch (error: any) {
       let message = error.message || 'Failed to create account';
       if (message.includes('already exists')) {

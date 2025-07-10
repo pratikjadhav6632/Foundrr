@@ -113,6 +113,63 @@ async getCurrentUser() {
     }
   }
 
+  /**
+   * Send OTP to phone using Appwrite's createPhoneToken
+   */
+  async sendPhoneOtp(phone: string) {
+    try {
+      const { ID } = await import('appwrite');
+      const userId = ID.unique();
+      const token = await account.createPhoneToken(userId, phone);
+      // token contains: userId, secret, expire
+      return { userId, secret: token.secret, expire: token.expire };
+    } catch (error: any) {
+      console.error('Error sending phone OTP:', error);
+      throw new Error(error.message || 'Failed to send OTP');
+    }
+  }
+
+  /**
+   * Verify OTP and create session using Appwrite's createSession
+   */
+  async verifyPhoneOtp(userId: string, otp: string) {
+    try {
+      const session = await account.createSession(userId, otp);
+      return session;
+    } catch (error: any) {
+      console.error('Error verifying phone OTP:', error);
+      throw new Error(error.message || 'Failed to verify OTP');
+    }
+  }
+
+  /**
+   * Send OTP to email using Appwrite's createEmailToken
+   */
+  async sendEmailOtp(email: string) {
+    try {
+      const { ID } = await import('appwrite');
+      const userId = ID.unique();
+      const token = await account.createEmailToken(userId, email);
+      return { userId, secret: token.secret, expire: token.expire };
+    } catch (error: any) {
+      console.error('Error sending email OTP:', error);
+      throw new Error(error.message || 'Failed to send OTP');
+    }
+  }
+
+  /**
+   * Verify email OTP and create session using Appwrite's createSession
+   */
+  async verifyEmailOtp(userId: string, otp: string) {
+    try {
+      const session = await account.createSession(userId, otp);
+      return session;
+    } catch (error: any) {
+      console.error('Error verifying email OTP:', error);
+      throw new Error(error.message || 'Failed to verify OTP');
+    }
+  }
+
   // Test connection method
   async testConnection() {
     try {

@@ -20,6 +20,7 @@ const ConnectionRequests = lazy(() => import('./pages/ConnectionRequests').then(
 const Notifications = lazy(() => import('./pages/Notifications').then(module => ({ default: module.Notifications })));
 const AboutFoundrr = lazy(() => import('./pages/AboutFoundrr').then(module => ({ default: module.default })));
 const ResetPassword = lazy(() => import('./pages/ResetPassword').then(module => ({ default: module.default })));
+const OtpVerification = lazy(() => import('./pages/OtpVerification').then(module => ({ default: module.default })));
 
 function App() {
   return (
@@ -67,6 +68,7 @@ function App() {
               } />
               <Route path="/about" element={<AboutFoundrr />} />
               <Route path="/reset-password" element={<ResetPassword />} />
+              <Route path="/otp-verification" element={<OtpVerification />} />
             </Routes>
           </Suspense>
           <Toaster position="top-right" />
