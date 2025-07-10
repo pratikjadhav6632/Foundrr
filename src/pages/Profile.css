@@ -54,4 +54,36 @@
     grid-template-columns:  300px;
     gap: 30px;
 }
+    .profile-info-chips, .user-info {
+        flex-wrap: wrap !important;
+        max-width: 100vw;
+        overflow-x: auto;
+        min-width: 0;
+        gap: 0.5rem !important;
+    }
+    .profile-info-chips span, .user-info span {
+        font-size: 0.85rem !important;
+        padding-left: 0.75rem !important;
+        padding-right: 0.75rem !important;
+        white-space: nowrap;
+        max-width: 90vw;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}
+
+@media (max-width: 430px) {
+    .profile-info-chips, .user-info {
+        flex-wrap: wrap !important;
+        max-width: 100vw;
+        overflow-x: auto;
+        min-width: 0;
+        gap: 0.4rem !important;
+    }
+    .profile-info-chips span, .user-info span {
+        font-size: 0.8rem !important;
+        padding-left: 0.5rem !important;
+        padding-right: 0.5rem !important;
+        max-width: 85vw;
+    }
 }

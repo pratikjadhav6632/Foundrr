@@ -46,6 +46,53 @@
   .messages-input {
     font-size: 1.05rem !important;
   }
+  .messages-chatbox {
+    padding: 0.5rem !important;
+    max-width: 100vw !important;
+    min-width: 0 !important;
+    border-radius: 1.2rem !important;
+  }
+  .messages-input {
+    font-size: 0.95rem !important;
+    min-width: 0 !important;
+    width: 100% !important;
+    max-width: 100vw !important;
+    box-sizing: border-box !important;
+  }
+  .messages-chatbox .sticky.bottom-0 {
+    flex-direction: column !important;
+    gap: 0.5rem !important;
+    padding-bottom: env(safe-area-inset-bottom, 0.5rem) !important;
+  }
+  .messages-chatbox input[type="text"] {
+    min-width: 0 !important;
+    width: 1% !important;
+    flex: 1 1 0 !important;
+    font-size: 0.95rem !important;
+    padding: 0.7rem 1rem !important;
+    border-radius: 1.5rem !important;
+  }
+  .messages-chatbox button {
+    min-width: 44px !important;
+    min-height: 44px !important;
+    padding: 0.5rem !important;
+    border-radius: 50% !important;
+  }
+  .messages-chatbox .rounded-2xl {
+    font-size: 0.95rem !important;
+    word-break: break-word !important;
+    max-width: 90vw !important;
+  }
+}
+
+@media (max-width: 350px) {
+  .messages-chatbox input[type="text"] {
+    font-size: 0.85rem !important;
+    padding: 0.5rem 0.7rem !important;
+  }
+  .messages-chatbox .rounded-2xl {
+    font-size: 0.85rem !important;
+  }
 }
 
 /* Utility classes for Home and Messages pages */
