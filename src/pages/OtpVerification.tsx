@@ -36,7 +36,7 @@ const OtpVerification: React.FC = () => {
   const handleResend = async () => {
     setResendLoading(true);
     try {
-      const result = await authService.sendEmailOtp(email);
+      const result = await authService.sendEmailOtp(userId, email);
       toast.success('OTP resent to your email!');
       setResendCooldown(30); // 30 seconds cooldown
       const interval = setInterval(() => {

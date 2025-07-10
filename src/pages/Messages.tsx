@@ -18,6 +18,24 @@ interface ChatData {
   unreadCount: number;
 }
 
+// Helper to render message content with clickable links
+function renderMessageContent(content: string) {
+  // Regex for URLs
+  const urlRegex = /(https?:\/\/[^\s]+|\/post\/[a-zA-Z0-9]+)/g;
+  const parts = content.split(urlRegex);
+  return parts.map((part, i) => {
+    if (/^https?:\/\//.test(part)) {
+      // External link
+      return <a key={i} href={part} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline break-all">{part}</a>;
+    } else if (/^\/post\/[a-zA-Z0-9]+$/.test(part)) {
+      // Internal post link
+      return <Link key={i} to={part} className="text-purple-600 underline break-all">{part}</Link>;
+    } else {
+      return <span key={i}>{part}</span>;
+    }
+  });
+}
+
 export const Messages: React.FC = () => {
   const { user } = useAuth();
   const [chats, setChats] = useState<ChatData[]>([]);
@@ -370,15 +388,17 @@ export const Messages: React.FC = () => {
                             {!isMe && isFirstInGroup && (
                               <img src={getProfileImageUrl(typeof (() => {
                                 const chat = chats.find(c => c.match.$id === selectedChat);
-                                return chat?.otherUserProfile.profileImage;
+                                const img = chat?.otherUserProfile.profileImage;
+                                return typeof img === 'string' ? img : undefined;
                               })() === 'string' ? (() => {
                                 const chat = chats.find(c => c.match.$id === selectedChat);
-                                return chat?.otherUserProfile.profileImage;
+                                const img = chat?.otherUserProfile.profileImage;
+                                return typeof img === 'string' ? img : undefined;
                               })() : undefined)} alt="User" className="w-8 h-8 rounded-full object-cover border-2 border-purple-100 mb-1" loading="lazy" />
                             )}
                             <div className={`flex flex-col items-${isMe ? 'end' : 'start'} w-full max-w-[70%]`}>
                               <div className={`rounded-2xl px-4 py-2 ${isMe ? 'bg-gradient-to-r from-purple-600 to-blue-600 text-white' : 'bg-white text-purple-900 border border-purple-100'} ${isFirstInGroup ? '' : 'rounded-tl-none rounded-tr-none'} shadow-md mb-0.5`} style={{borderTopLeftRadius: isMe ? '1rem' : isFirstInGroup ? '1rem' : '0.5rem', borderTopRightRadius: !isMe ? '1rem' : isFirstInGroup ? '1rem' : '0.5rem'}}>
-                                <span className="break-words whitespace-pre-line text-sm leading-relaxed">{msg.content}</span>
+                                <span className="break-words whitespace-pre-line text-sm leading-relaxed">{renderMessageContent(msg.content)}</span>
                               </div>
                               {isLastInGroup && (
                                 <span className="text-xs text-purple-300 mt-1 mb-1">{formatTime(msg.$createdAt)}</span>

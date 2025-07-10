@@ -145,10 +145,8 @@ async getCurrentUser() {
   /**
    * Send OTP to email using Appwrite's createEmailToken
    */
-  async sendEmailOtp(email: string) {
+  async sendEmailOtp(userId: string, email: string) {
     try {
-      const { ID } = await import('appwrite');
-      const userId = ID.unique();
       const token = await account.createEmailToken(userId, email);
       return { userId, secret: token.secret, expire: token.expire };
     } catch (error: any) {
