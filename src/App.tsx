@@ -7,6 +7,9 @@ import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
 import VerifyCallback from './pages/VerifyCallback';
 import PostDetail from './pages/PostDetail';
+import Feedback from './pages/Feedback';
+import PrivacyPolicy from './pages/PrivacyPolicy';
+import HelpSupport from './pages/HelpSupport';
 
 // Fix lazy imports for named exports
 const Home = lazy(() => import('./pages/Home').then(module => ({ default: module.Home })));
@@ -71,6 +74,9 @@ function App() {
               <Route path="/reset-password" element={<ResetPassword />} />
               <Route path="/otp-verification" element={<OtpVerification />} />
               <Route path="/post/:id" element={<PostDetail />} />
+              <Route path="/feedback" element={<Feedback />} />
+              <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+              <Route path="/help-support" element={<HelpSupport />} />
             </Routes>
           </Suspense>
           <Toaster position="top-right" />

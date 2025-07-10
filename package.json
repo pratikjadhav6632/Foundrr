@@ -12,9 +12,11 @@
   "dependencies": {
     "@cloudinary/react": "^1.14.3",
     "@cloudinary/url-gen": "^1.21.0",
+    "@vercel/node": "^5.3.4",
     "appwrite": "^18.1.1",
     "framer-motion": "^12.23.0",
     "lucide-react": "^0.344.0",
+    "nodemailer": "^7.0.5",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-hot-toast": "^2.5.2",

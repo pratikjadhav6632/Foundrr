@@ -4,7 +4,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { Edit3, MapPin, Briefcase, Star, Mail, User, Save, X, Image as ImageIcon,Trash2, UserPlus, UserMinus, BookOpen, Search, Building2, Heart, MessageCircle } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { uploadToCloudinary } from '../services/cloudinaryService';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, Link } from 'react-router-dom';
 import { LogOut } from 'lucide-react';
 import { profileService } from '../services/profileService';
 import { matchService } from '../services/matchService';
@@ -335,8 +335,6 @@ export const Profile: React.FC = () => {
                 {isEditing ? <X className="w-4 h-4" /> : <Edit3 className="w-4 h-4 " />}
                 <span className=''>{isEditing ? 'Cancel' : 'Edit'}</span>
               </button>
-           
-         
           
 
             </div>
@@ -607,21 +605,21 @@ export const Profile: React.FC = () => {
               <button
                 className="w-full text-left px-4 py-3 rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors font-medium text-gray-700"
                 type="button"
-                onClick={() => { }}
+                onClick={() => navigate('/privacy-policy')}
               >
                 Company Policy
               </button>
               <button
                 className="w-full text-left px-4 py-3 rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors font-medium text-gray-700"
                 type="button"
-                onClick={() => { }}
+                onClick={() => navigate('/help-support')}
               >
                 Help & Support
               </button>
               <button
                 className="w-full text-left px-4 py-3 rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors font-medium text-gray-700"
                 type="button"
-                onClick={() => { }}
+                onClick={() => navigate('/feedback')}
               >
                 Feedback
               </button>
