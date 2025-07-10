@@ -24,6 +24,7 @@ const OtpVerification: React.FC = () => {
     setLoading(true);
     try {
       await authService.verifyEmailOtp(userId, otp);
+      await authService.login(email, password); // Log the user in after verification
       toast.success('Email verified and account created!');
       navigate('/profile-setup');
     } catch (error: any) {
