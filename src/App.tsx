@@ -6,6 +6,7 @@ import { ProtectedRoute } from './components/ProtectedRoute';
 import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
 import VerifyCallback from './pages/VerifyCallback';
+import PostDetail from './pages/PostDetail';
 
 // Fix lazy imports for named exports
 const Home = lazy(() => import('./pages/Home').then(module => ({ default: module.Home })));
@@ -69,6 +70,7 @@ function App() {
               <Route path="/about" element={<AboutFoundrr />} />
               <Route path="/reset-password" element={<ResetPassword />} />
               <Route path="/otp-verification" element={<OtpVerification />} />
+              <Route path="/post/:id" element={<PostDetail />} />
             </Routes>
           </Suspense>
           <Toaster position="top-right" />
