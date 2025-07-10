@@ -5,6 +5,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { toast } from 'react-hot-toast';
 import { User, Mail, Lock, Eye, EyeOff, AlertCircle, Phone } from 'lucide-react';
 import { authService } from '../services/authService';
+import { ID } from 'appwrite';
 
 export const Signup: React.FC = () => {
   const [username, setUsername] = useState('');
@@ -40,8 +41,9 @@ export const Signup: React.FC = () => {
       return;
     }
     try {
-      // Send OTP to email
-      const { userId } = await authService.sendEmailOtp(email);
+      // Generate userId and send OTP to email
+      const userId = ID.unique();
+      const { userId: returnedUserId } = await authService.sendEmailOtp(userId, email);
       setOtpSent(true);
       setOtpUserId(userId);
       toast.success('OTP sent to your email!');
