@@ -25,7 +25,7 @@ const OtpVerification: React.FC = () => {
     try {
       await authService.verifyEmailOtp(userId, otp);
       toast.success('Email verified and account created!');
-      navigate('/profile-setup');
+      window.location.href = "/profile-setup"; // Force reload to update AuthContext
     } catch (error: any) {
       toast.error(error.message || 'Failed to verify OTP');
     } finally {
