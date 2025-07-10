@@ -1,0 +1,66 @@
+/* Custom iPhone/mobile responsiveness fixes */
+
+/* iPhone SE/5/5S/5C/5E (320px) */
+@media (max-width: 350px) {
+  .home-hero, .messages-container {
+    padding: 0.5rem !important;
+    font-size: 0.95rem !important;
+  }
+  .home-hero h1, .home-hero .text-3xl, .home-hero .text-5xl, .home-hero .text-7xl {
+    font-size: 1.5rem !important;
+  }
+  .messages-chatbox, .messages-list {
+    padding: 0.5rem !important;
+  }
+}
+
+/* iPhone 6/7/8, X, 11 Pro (375px) */
+@media (max-width: 400px) {
+  .home-hero, .messages-container {
+    padding: 0.75rem !important;
+    font-size: 1rem !important;
+  }
+  .home-hero h1, .home-hero .text-3xl, .home-hero .text-5xl, .home-hero .text-7xl {
+    font-size: 2rem !important;
+  }
+  .messages-chatbox, .messages-list {
+    padding: 0.75rem !important;
+  }
+  .messages-input {
+    font-size: 1rem !important;
+  }
+}
+
+/* iPhone 6/7/8 Plus, XR, 11, 12, 13, 14 (414px) */
+@media (max-width: 430px) {
+  .home-hero, .messages-container {
+    padding: 1rem !important;
+    font-size: 1.05rem !important;
+  }
+  .home-hero h1, .home-hero .text-3xl, .home-hero .text-5xl, .home-hero .text-7xl {
+    font-size: 2.3rem !important;
+  }
+  .messages-chatbox, .messages-list {
+    padding: 1rem !important;
+  }
+  .messages-input {
+    font-size: 1.05rem !important;
+  }
+}
+
+/* Utility classes for Home and Messages pages */
+.home-hero {
+  /* Add this class to the main hero section div in Home.tsx */
+}
+.messages-container {
+  /* Add this class to the main container div in Messages.tsx */
+}
+.messages-chatbox {
+  /* Add this class to the chat box area in Messages.tsx */
+}
+.messages-list {
+  /* Add this class to the chat list area in Messages.tsx */
+}
+.messages-input {
+  /* Add this class to the message input in Messages.tsx */
+} 

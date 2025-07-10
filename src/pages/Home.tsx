@@ -24,7 +24,7 @@ export const Home: React.FC = () => {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="relative overflow-hidden px-4 py-16 sm:py-20">
+      <section className="relative overflow-hidden px-4 py-16 sm:py-20 home-hero">
         <div className="container mx-auto text-center">
           <motion.h1 
             className="text-3xl sm:text-5xl md:text-7xl font-bold mb-4 sm:mb-6"

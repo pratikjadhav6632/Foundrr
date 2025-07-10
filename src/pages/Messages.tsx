@@ -262,14 +262,14 @@ export const Messages: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-100 via-blue-50 to-pink-100 py-6 sm:py-8 px-2 sm:px-4">
+    <div className="min-h-screen bg-gradient-to-br from-purple-100 via-blue-50 to-pink-100 py-6 sm:py-8 px-2 sm:px-4 messages-container">
       <div className='text-3xl font-bold text-center mt-3 mb-3'>
         <h1>Messages</h1>
       </div>
       <div className="max-w-5xl mx-auto flex flex-col sm:flex-row gap-4 sm:gap-8">
         {/* Chat List - hide on mobile if chat is open */}
         <div
-          className={`w-full sm:w-1/3 bg-white rounded-3xl shadow-xl p-0 sm:p-0 mb-4 sm:mb-0 overflow-y-auto max-h-[80vh] border border-gray-100 ${isMobile && showChatScreen ? 'hidden' : ''}`}
+          className={`w-full sm:w-1/3 bg-white rounded-3xl shadow-xl p-0 sm:p-0 mb-4 sm:mb-0 overflow-y-auto max-h-[80vh] border border-gray-100 messages-list ${isMobile && showChatScreen ? 'hidden' : ''}`}
         >
           <div className="p-4 border-b border-gray-100 sticky top-0 bg-white z-10">
             <div className="flex items-center gap-2">
@@ -314,7 +314,7 @@ export const Messages: React.FC = () => {
         </div>
         {/* Messages Section - hide on mobile if not showing chat screen */}
         <div
-          className={`w-full sm:w-2/3 bg-white rounded-3xl shadow-xl flex flex-col max-h-[80vh] border border-gray-100 ${isMobile && !showChatScreen ? 'hidden' : ''}`}
+          className={`w-full sm:w-2/3 bg-white rounded-3xl shadow-xl flex flex-col max-h-[80vh] border border-gray-100 messages-chatbox ${isMobile && !showChatScreen ? 'hidden' : ''}`}
         >
           {selectedChat ? (
             <>
@@ -425,9 +425,12 @@ export const Messages: React.FC = () => {
                   type="text"
                   value={newMessage}
                   onChange={e => setNewMessage(e.target.value)}
-                  className="flex-1 px-4 py-2 border border-purple-200 rounded-full focus:ring-2 focus:ring-purple-400 focus:border-transparent text-sm bg-purple-50 shadow-md placeholder:text-purple-300"
-                  placeholder="Type a message..."
-                  onKeyDown={e => { if (e.key === 'Enter') handleSendMessage(); }}
+                  onKeyDown={e => {
+                    if (e.key === 'Enter') handleSendMessage();
+                  }}
+                  className="flex-1 px-3 py-2 rounded-full border border-purple-200 focus:ring-2 focus:ring-purple-400 focus:border-transparent text-sm sm:text-base bg-purple-50 placeholder:text-purple-300 messages-input"
+                  placeholder="Type your message..."
+                  disabled={editLoading}
                 />
                 <button
                   onClick={handleSendMessage}
