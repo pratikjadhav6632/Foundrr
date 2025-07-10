@@ -11,6 +11,7 @@ import { useNavigate } from 'react-router-dom';
 import { matchService } from '../services/matchService';
 import { messageService } from '../services/messageService';
 import { div } from 'framer-motion/client';
+import { getAppwriteFilePreviewUrl } from '../lib/appwrite';
 
 interface PostWithProfile extends ForumPost {
   authorProfile?: Profile;
@@ -274,6 +275,13 @@ export const Forum: React.FC = () => {
     }
   };
 
+  const getProfileImageUrl = (url?: string) => {
+    if (!url) return 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png';
+    if (typeof url !== 'string') return 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png';
+    if (url.startsWith('http://') || url.startsWith('https://')) return url;
+    return getAppwriteFilePreviewUrl(url);
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -335,7 +343,7 @@ export const Forum: React.FC = () => {
                 <div className="flex items-start space-x-3 sm:space-x-4">
                   <a href={`/profile/${post.authorProfile?.userId}`} className="hover:underline">
                     <img 
-                      src={post.authorProfile?.profileImage || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'} 
+                      src={getProfileImageUrl(post.authorProfile?.profileImage)} 
                       alt="Author"
                       className="w-10 h-10 sm:w-12 sm:h-12 rounded-full object-cover"
                       loading="lazy"
@@ -481,7 +489,7 @@ export const Forum: React.FC = () => {
                 <X className="w-6 h-6" />
               </button>
               <div className="flex items-center gap-2 mb-2">
-                <img src={commentModalPost.authorProfile?.profileImage || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'} alt="Author" className="w-8 h-8 rounded-full object-cover" loading="lazy" />
+                <img src={getProfileImageUrl(commentModalPost.authorProfile?.profileImage)} alt="Author" className="w-8 h-8 rounded-full object-cover" loading="lazy" />
                 <span className="font-semibold text-gray-800 text-sm sm:text-base">{commentModalPost.authorProfile?.username || commentModalPost.authorProfile?.name}</span>
                 <span className="text-gray-500 text-xs sm:text-sm">{formatTime(commentModalPost.$createdAt)}</span>
                 <span className="bg-purple-100 text-purple-800 px-2 py-1 rounded-full text-xs ml-auto">{commentModalPost.category}</span>
@@ -498,7 +506,7 @@ export const Forum: React.FC = () => {
                 <div className="space-y-2 max-h-40 sm:max-h-60 overflow-y-auto pr-1">
                   {comments.map((c) => (
                     <div key={c.$id} className="flex items-start gap-2 bg-gray-50 rounded-lg p-2">
-                      <img src={c.authorProfile?.profileImage || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'} alt="Author" className="w-7 h-7 rounded-full object-cover" loading="lazy" />
+                      <img src={getProfileImageUrl(c.authorProfile?.profileImage)} alt="Author" className="w-7 h-7 rounded-full object-cover" loading="lazy" />
                       <div className="flex-1">
                         <div className="flex items-center gap-1">
                           <span className="font-semibold text-xs sm:text-sm text-gray-800">{c.authorProfile?.username || c.authorProfile?.name}</span>
@@ -573,7 +581,7 @@ export const Forum: React.FC = () => {
                           className="w-full flex items-center gap-2 px-3 py-2 rounded-lg bg-purple-50 hover:bg-purple-100 text-purple-800 font-medium transition-all"
                           disabled={!!sendSuccess}
                         >
-                          <img src={friend.profile.profileImage || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'} alt="Friend" className="w-7 h-7 rounded-full object-cover" loading="lazy" />
+                          <img src={getProfileImageUrl(friend.profile.profileImage)} alt="Friend" className="w-7 h-7 rounded-full object-cover" loading="lazy" />
                           <span>{friend.profile.username || friend.profile.name || 'Unknown'}</span>
                           {sendSuccess === (friend.profile.username || friend.profile.name) && <span className="ml-auto text-green-600">Sent!</span>}
                         </button>

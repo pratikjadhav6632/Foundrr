@@ -1,15 +1,14 @@
-import { databases, DATABASE_ID, COLLECTIONS, Query, storage, BUCKET_ID } from '../lib/appwrite';
+import { databases, DATABASE_ID, COLLECTIONS, Query } from '../lib/appwrite';
+import { uploadToCloudinary } from './cloudinaryService';
 import { ID } from 'appwrite';
 import { Profile } from '../types';
 
 export class ProfileService {
   async uploadProfileImage(file: File): Promise<string> {
     try {
-      const uploaded = await storage.createFile(BUCKET_ID, ID.unique(), file);
-      // Store only the fileId
-      return uploaded.$id;
+      return await uploadToCloudinary(file);
     } catch (error) {
-      console.error('Error uploading profile image:', error);
+      console.error('Error uploading profile image to Cloudinary:', error);
       throw error;
     }
   }

@@ -24,8 +24,18 @@ export const ProfileSetup: React.FC = () => {
   });
   const [newSkill, setNewSkill] = useState('');
   const [loading, setLoading] = useState(false);
+  const [profileImage, setProfileImage] = useState<File | null>(null);
+  const [profileImagePreview, setProfileImagePreview] = useState<string | null>(null);
 
   const navigate = useNavigate();
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setProfileImage(file);
+      setProfileImagePreview(URL.createObjectURL(file));
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -76,7 +86,7 @@ export const ProfileSetup: React.FC = () => {
         companyName: formData.companyName || '',
         location: formData.location || '',
         qualification: formData.qualification || '',
-        profileImage: undefined,
+        profileImage: profileImage || undefined,
       });
       setProfile && setProfile(newProfile);
       toast.success('Profile setup complete!');
@@ -125,6 +135,25 @@ export const ProfileSetup: React.FC = () => {
           <p className="text-gray-600 text-sm sm:text-base">Tell us about yourself to find the perfect co-founder</p>
         </div>
         <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
+          {/* Profile Image Upload */}
+          <div className="flex flex-col items-center mb-4">
+            <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2">Profile Image</label>
+            <div className="relative w-24 h-24 mb-2">
+              <img
+                src={profileImagePreview || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'}
+                alt="Profile Preview"
+                className="w-24 h-24 rounded-full object-cover border-2 border-purple-300 shadow"
+              />
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+                className="absolute inset-0 opacity-0 cursor-pointer"
+                aria-label="Upload Profile Image"
+              />
+            </div>
+            <span className="text-xs text-gray-500">Click the image to upload (JPG, PNG, etc.)</span>
+          </div>
           <div>
             <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">
               Username

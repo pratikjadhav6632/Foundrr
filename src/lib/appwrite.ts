@@ -65,3 +65,13 @@ export const validateAppwriteConfig = () => {
     return false;
   }
 };
+
+export const getAppwriteFilePreviewUrl = (fileId: string) => {
+  if (!fileId) return '';
+  try {
+    // This returns a URL object, so we convert it to string
+    return storage.getFilePreview(BUCKET_ID, fileId).toString();
+  } catch (e) {
+    return '';
+  }
+};

@@ -9,6 +9,7 @@ import { forumService } from '../services/forumService';
 import { Match, Message, Profile } from '../types';
 import toast from 'react-hot-toast';
 import { Link } from 'react-router-dom';
+import { getAppwriteFilePreviewUrl } from '../lib/appwrite';
 
 interface ChatData {
   match: Match;
@@ -245,6 +246,13 @@ export const Messages: React.FC = () => {
     return `${days}d ago`;
   };
 
+  const getProfileImageUrl = (url?: string) => {
+    if (!url) return 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png';
+    if (typeof url !== 'string') return 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png';
+    if (url.startsWith('http://') || url.startsWith('https://')) return url;
+    return getAppwriteFilePreviewUrl(url);
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -291,7 +299,7 @@ export const Messages: React.FC = () => {
                     if (isMobile) setShowChatScreen(true);
                   }}
                 >
-                  <img src={chat.otherUserProfile.profileImage || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'} alt="User" className="w-11 h-11 rounded-full object-cover border-2 border-purple-100 group-hover:border-purple-300 transition-all" loading="lazy" />
+                  <img src={getProfileImageUrl(typeof chat.otherUserProfile.profileImage === 'string' ? chat.otherUserProfile.profileImage : undefined)} alt="User" className="w-11 h-11 rounded-full object-cover border-2 border-purple-100 group-hover:border-purple-300 transition-all" loading="lazy" />
                   <div className="flex-1 min-w-0">
                     <div className="font-semibold text-purple-900 truncate text-sm sm:text-base">{chat.otherUserProfile.username || chat.otherUserProfile.name}</div>
                     <div className="text-purple-400 text-xs truncate">{chat.lastMessage?.content || 'No messages yet.'}</div>
@@ -325,7 +333,7 @@ export const Messages: React.FC = () => {
                   const selectedChatData = chats.find(chat => chat.match.$id === selectedChat);
                   return selectedChatData ? (
                     <>
-                      <img src={selectedChatData.otherUserProfile.profileImage || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'} alt="Profile" className="w-10 h-10 rounded-full object-cover border-2 border-purple-100" />
+                      <img src={getProfileImageUrl(typeof selectedChatData.otherUserProfile.profileImage === 'string' ? selectedChatData.otherUserProfile.profileImage : undefined)} alt="Profile" className="w-10 h-10 rounded-full object-cover border-2 border-purple-100" />
                       <div>
                         <div className="font-semibold text-purple-900 text-base">{selectedChatData.otherUserProfile.username || selectedChatData.otherUserProfile.name}</div>
                         <div className="text-xs text-purple-400">Last active: {formatTime(selectedChatData.otherUserProfile.lastActive || selectedChatData.otherUserProfile.$updatedAt)}</div>
@@ -360,10 +368,13 @@ export const Messages: React.FC = () => {
                             className={`flex ${isMe ? 'justify-end' : 'justify-start'} items-end gap-2 mb-${isLastInGroup ? '4' : '1'} group relative`}
                           >
                             {!isMe && isFirstInGroup && (
-                              <img src={(() => {
+                              <img src={getProfileImageUrl(typeof (() => {
                                 const chat = chats.find(c => c.match.$id === selectedChat);
-                                return chat?.otherUserProfile.profileImage || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png';
-                              })()} alt="User" className="w-8 h-8 rounded-full object-cover border-2 border-purple-100 mb-1" loading="lazy" />
+                                return chat?.otherUserProfile.profileImage;
+                              })() === 'string' ? (() => {
+                                const chat = chats.find(c => c.match.$id === selectedChat);
+                                return chat?.otherUserProfile.profileImage;
+                              })() : undefined)} alt="User" className="w-8 h-8 rounded-full object-cover border-2 border-purple-100 mb-1" loading="lazy" />
                             )}
                             <div className={`flex flex-col items-${isMe ? 'end' : 'start'} w-full max-w-[70%]`}>
                               <div className={`rounded-2xl px-4 py-2 ${isMe ? 'bg-gradient-to-r from-purple-600 to-blue-600 text-white' : 'bg-white text-purple-900 border border-purple-100'} ${isFirstInGroup ? '' : 'rounded-tl-none rounded-tr-none'} shadow-md mb-0.5`} style={{borderTopLeftRadius: isMe ? '1rem' : isFirstInGroup ? '1rem' : '0.5rem', borderTopRightRadius: !isMe ? '1rem' : isFirstInGroup ? '1rem' : '0.5rem'}}>

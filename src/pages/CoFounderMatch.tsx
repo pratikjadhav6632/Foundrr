@@ -4,7 +4,7 @@ import {  Handshake, X, MapPin, Briefcase, Star, User, Info} from 'lucide-react'
 import { toast } from 'react-hot-toast';
 import { useAuth } from '../contexts/AuthContext';
 import { profileService } from '../services/profileService';
-import { databases, DATABASE_ID, COLLECTIONS, Query } from '../lib/appwrite';
+import { databases, DATABASE_ID, COLLECTIONS, Query, getAppwriteFilePreviewUrl } from '../lib/appwrite';
 import { matchService } from '../services/matchService';
 import { Profile } from '../types';
 import { useNavigate } from 'react-router-dom';
@@ -118,6 +118,13 @@ export const CoFounderMatch: React.FC = () => {
     setTimeout(() => {
       setCurrentIndex(prev => prev + 1);
     }, 300);
+  };
+
+  const getProfileImageUrl = (url?: string) => {
+    if (!url) return 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png';
+    if (typeof url !== 'string') return 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png';
+    if (url.startsWith('http://') || url.startsWith('https://')) return url;
+    return getAppwriteFilePreviewUrl(url);
   };
 
   if (loading) {
@@ -314,7 +321,7 @@ export const CoFounderMatch: React.FC = () => {
             <div className="relative h-72 bg-gradient-to-br from-purple-400 via-blue-400 to-blue-600 animate-gradient-x flex flex-col items-center justify-center">
               <a href={`/profile/${currentProfile.userId}`} className="hover:underline flex flex-col items-center">
                 <img 
-                  src={currentProfile.profileImage || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'} 
+                  src={getProfileImageUrl(typeof currentProfile.profileImage === 'string' ? currentProfile.profileImage : undefined)} 
                   alt="Profile"
                   className="w-40 h-40 object-cover rounded-full border-4 border-white shadow-2xl transition-transform duration-300 hover:scale-105"
                 />

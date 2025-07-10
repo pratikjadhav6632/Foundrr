@@ -10,10 +10,15 @@ import { profileService } from '../services/profileService';
 import { matchService } from '../services/matchService';
 import { forumService } from '../services/forumService';
 import './Profile.css'
-import { account } from '../lib/appwrite';
+import { account, getAppwriteFilePreviewUrl } from '../lib/appwrite';
 
 const getProfileImageUrl = (url?: string) => {
-  return url || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png';
+  if (!url) return 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png';
+  if (typeof url !== 'string') return 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png';
+  // If it's already a full URL, return as is
+  if (url.startsWith('http://') || url.startsWith('https://')) return url;
+  // Otherwise, treat as Appwrite file ID
+  return getAppwriteFilePreviewUrl(url);
 };
 
 export const Profile: React.FC = () => {
@@ -169,7 +174,7 @@ export const Profile: React.FC = () => {
         <div className="max-w-md mx-auto profile-container">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="bg-white rounded-3xl shadow-2xl overflow-hidden p-4 sm:p-8 flex flex-col items-center profile-section">
             <div className="relative w-28 h-28 sm:w-32 sm:h-32 mb-3 sm:mb-4 profile-header">
-              <img src={getProfileImageUrl(publicProfile.profileImage)} alt={publicProfile.username || publicProfile.name} className="w-full h-full rounded-full object-cover border-4 border-purple-200 shadow-lg profile-image" loading="lazy" />
+              <img src={getProfileImageUrl(typeof publicProfile.profileImage === 'string' ? publicProfile.profileImage : undefined)} alt={publicProfile.username || publicProfile.name} className="w-full h-full rounded-full object-cover border-4 border-purple-200 shadow-lg profile-image" loading="lazy" />
             </div>
             <h2 className="text-2xl font-bold mb-1 text-center">{publicProfile.username || publicProfile.name}</h2>
             <div className="flex justify-center mb-4">
@@ -260,11 +265,9 @@ export const Profile: React.FC = () => {
                   <div className="w-24 h-24 rounded-full bg-white   relative prof-img">
                     <img
                       src={
-                        editData.profileImage
-                          ? getProfileImageUrl(editData.profileImage)
-                          : profile?.profileImage
-                            ? getProfileImageUrl(profile.profileImage)
-                            : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'
+                        getProfileImageUrl(typeof editData.profileImage === 'string' ? editData.profileImage : undefined)
+                          ? getProfileImageUrl(typeof editData.profileImage === 'string' ? editData.profileImage : undefined)
+                          : getProfileImageUrl(typeof profile?.profileImage === 'string' ? profile?.profileImage : undefined)
                       }
                       alt={user.name}
                       className="w-full h-full rounded-full object-cover profile-img"
@@ -569,7 +572,7 @@ export const Profile: React.FC = () => {
                       className="bg-gray-50 rounded-xl shadow p-4"
                     >
                       <div className="flex items-center gap-3 mb-2">
-                        <img src={profile?.profileImage || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'} alt="Author" className="w-8 h-8 rounded-full object-cover" loading="lazy" />
+                        <img src={typeof profile?.profileImage === 'string' ? getProfileImageUrl(profile?.profileImage) : getProfileImageUrl(undefined)} alt="Author" className="w-8 h-8 rounded-full object-cover" loading="lazy" />
                         <span className="font-semibold text-gray-800">{profile?.username || profile?.name}</span>
                         <span className="text-gray-500 text-xs">{new Date(post.$createdAt).toLocaleString()}</span>
                         <span className="bg-purple-100 text-purple-800 px-2 py-1 rounded-full text-xs ml-auto">{post.category}</span>

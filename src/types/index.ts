@@ -19,7 +19,7 @@ export interface Profile {
   lookingFor: string;
   isFounder: boolean;
   companyName?: string;
-  profileImage?: string;
+  profileImage?: string | File;
   location?: string;
   $createdAt: string;
   $updatedAt: string;

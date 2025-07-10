@@ -4,6 +4,7 @@ import { matchService } from '../services/matchService';
 import { profileService } from '../services/profileService';
 import { Profile, Match } from '../types';
 import { toast } from 'react-hot-toast';
+import { getAppwriteFilePreviewUrl } from '../lib/appwrite';
 
 interface RequestData {
   match: Match;
@@ -54,6 +55,13 @@ export const ConnectionRequests: React.FC = () => {
     }
   };
 
+  const getProfileImageUrl = (url?: string) => {
+    if (!url) return 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png';
+    if (typeof url !== 'string') return 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png';
+    if (url.startsWith('http://') || url.startsWith('https://')) return url;
+    return getAppwriteFilePreviewUrl(url);
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -74,7 +82,7 @@ export const ConnectionRequests: React.FC = () => {
               <div key={match.$id} className="bg-white rounded-xl shadow p-6 flex items-center space-x-4">
                 <a href={`/profile/${requesterProfile.userId}`} className="hover:underline">
                   <img
-                    src={requesterProfile.profileImage || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'}
+                    src={getProfileImageUrl(typeof requesterProfile.profileImage === 'string' ? requesterProfile.profileImage : undefined)}
                     alt="Profile"
                     className="w-16 h-16 rounded-full object-cover"
                   />
