@@ -162,7 +162,7 @@ export const ProfileSetup: React.FC = () => {
           </div>
           <div>
             <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">
-              Username
+              Username <span className='text-red-500'>*</span> 
             </label>
             <input
               type="text"
@@ -176,7 +176,7 @@ export const ProfileSetup: React.FC = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
             <div>
               <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">
-                Age
+                Age <span className='text-red-500'>*</span> 
               </label>
               <input
                 type="number"
@@ -189,7 +189,7 @@ export const ProfileSetup: React.FC = () => {
             </div>
             <div>
               <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">
-                Experience Level
+                Experience Level <span className='text-red-500'>*</span> 
               </label>
               <select
                 value={formData.experience}
@@ -207,7 +207,7 @@ export const ProfileSetup: React.FC = () => {
           </div>
           <div>
             <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">
-              Location
+              Location <span className='text-red-500'>*</span> 
             </label>
             <input
               type="text"
@@ -215,11 +215,12 @@ export const ProfileSetup: React.FC = () => {
               onChange={(e) => setFormData(prev => ({ ...prev, location: e.target.value }))}
               className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all text-xs sm:text-base"
               placeholder="Enter your location (e.g., San Francisco, CA)"
+              required
             />
           </div>
           <div>
             <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">
-              Interested Field
+              Interested Field <span className='text-red-500'>*</span> 
             </label>
             <select
               value={formData.interestedField}
@@ -240,7 +241,7 @@ export const ProfileSetup: React.FC = () => {
           </div>
           <div>
             <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">
-              Bio
+              Bio <span className='text-red-500'>*</span> 
             </label>
             <textarea
               value={formData.bio}
@@ -253,7 +254,7 @@ export const ProfileSetup: React.FC = () => {
           </div>
           <div>
             <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">
-              Skills
+              Skills <span className='text-red-500'>*</span> 
             </label>
             <div className="flex flex-wrap gap-2 mb-2 sm:mb-3">
               {formData.skills.map((skill, index) => (
@@ -292,16 +293,27 @@ export const ProfileSetup: React.FC = () => {
           </div>
           <div>
             <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">
-              Looking For
+              Looking For <span className='text-red-500'>*</span> 
             </label>
-            <input
-              type="text"
+            <select
               value={formData.lookingFor}
               onChange={(e) => setFormData(prev => ({ ...prev, lookingFor: e.target.value }))}
               className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all text-xs sm:text-base"
-              placeholder="e.g., Technical Co-founder, Business Co-founder"
               required
-            />
+            >
+              <option value="Startup">Startup</option>
+              <option value="Tech Cofounder">Tech Cofounder</option>
+              <option value="Marketing Cofounder">Marketing Cofounder</option>
+              <option value="Team">Team</option>
+              <option value="Editor">Editor</option>
+              <option value="CMO">CMO</option>
+              <option value="CTO">CTO</option>
+              <option value="COO">COO</option>
+              <option value="CFO">CFO</option>
+              <option value="Designer">Designer</option>
+              <option value="Marketer">Marketer</option>
+              <option value="Other">Other</option>
+            </select>
           </div>
           <div>
             <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">
@@ -317,7 +329,7 @@ export const ProfileSetup: React.FC = () => {
           </div>
           <div>
             <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">
-              Who are you?
+              Who are you? <span className='text-red-500'>*</span> 
             </label>
             <select
               value={formData.whoYouAre}
