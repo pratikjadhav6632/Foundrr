@@ -84,6 +84,11 @@ export const CoFounderMatch: React.FC = () => {
           return { ...p, name } as Profile;
         })
       );
+      // Shuffle the profilesData array using Fisher-Yates algorithm
+      for (let i = profilesData.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [profilesData[i], profilesData[j]] = [profilesData[j], profilesData[i]];
+      }
       setProfiles(profilesData);
     } catch (error) {
       console.error('Error loading profiles:', error);

@@ -17,12 +17,23 @@ export const Signup: React.FC = () => {
   const [otpSent, setOtpSent] = useState(false);
   const [otpUserId, setOtpUserId] = useState<string | null>(null);
   const [otpPhone, setOtpPhone] = useState<string | null>(null);
+  const [acceptPolicy, setAcceptPolicy] = useState(false);
+  const [policyError, setPolicyError] = useState('');
   const { signup, connectionStatus } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+
+    // Policy acceptance validation
+    if (!acceptPolicy) {
+      setPolicyError('You must accept the Privacy Policy and Terms & Conditions to sign up.');
+      setLoading(false);
+      return;
+    } else {
+      setPolicyError('');
+    }
 
     // Basic validation
     if (!username.trim() || !email.trim() || !password.trim() || !mobile.trim()) {
@@ -164,6 +175,30 @@ export const Signup: React.FC = () => {
               </button>
             </div>
           </div>
+          {/* Policy acceptance checkbox */}
+          <div className="flex items-start">
+            <input
+              id="acceptPolicy"
+              type="checkbox"
+              checked={acceptPolicy}
+              onChange={e => setAcceptPolicy(e.target.checked)}
+              className="mt-1 mr-2 accent-purple-600"
+              disabled={loading}
+              required
+            />
+            <label htmlFor="acceptPolicy" className="text-xs sm:text-sm text-gray-700 select-none">
+              I accept the{' '}
+              <Link to="/privacy-policy" className="text-purple-600 underline hover:text-purple-800" target="_blank" rel="noopener noreferrer">
+                Privacy Policy
+              </Link>{' '}and{' '}
+              <Link to="/privacy-policy" className="text-purple-600 underline hover:text-purple-800" target="_blank" rel="noopener noreferrer">
+                Terms & Conditions
+              </Link>
+            </label>
+          </div>
+          {policyError && (
+            <div className="text-xs text-red-600 mb-2">{policyError}</div>
+          )}
         
           <button
             type="submit"
