@@ -26,7 +26,7 @@ export class ProfileService {
         DATABASE_ID,
         COLLECTIONS.PROFILES,
         ID.unique(),
-        { ...profileData, profileImage: profileImageUrl }
+        { ...profileData, profileImage: profileImageUrl, whoYouAre: profileData.whoYouAre }
       );
       return profile as unknown as Profile;
     } catch (error) {

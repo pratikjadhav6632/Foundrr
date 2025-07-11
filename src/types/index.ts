@@ -28,6 +28,7 @@ export interface Profile {
   linkedin?: string;
   github?: string;
   mobile?: string;
+  whoYouAre: 'student' | 'entrepreneur' | 'founder' | 'employee' | 'company' | 'advertisement' | 'newspage';
 }
 
 export interface Match {

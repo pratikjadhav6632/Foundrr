@@ -84,12 +84,19 @@ export const CoFounderMatch: React.FC = () => {
           return { ...p, name } as Profile;
         })
       );
-      // Shuffle the profilesData array using Fisher-Yates algorithm
-      for (let i = profilesData.length - 1; i > 0; i--) {
+      // Filter out company, advertisement, newspage profiles
+      const filteredProfiles = profilesData.filter(
+        (profile) =>
+          profile.whoYouAre !== 'company' &&
+          profile.whoYouAre !== 'advertisement' &&
+          profile.whoYouAre !== 'newspage'
+      );
+      // Shuffle the filteredProfiles array using Fisher-Yates algorithm
+      for (let i = filteredProfiles.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
-        [profilesData[i], profilesData[j]] = [profilesData[j], profilesData[i]];
+        [filteredProfiles[i], filteredProfiles[j]] = [filteredProfiles[j], filteredProfiles[i]];
       }
-      setProfiles(profilesData);
+      setProfiles(filteredProfiles);
     } catch (error) {
       console.error('Error loading profiles:', error);
       toast.error('Failed to load profiles');

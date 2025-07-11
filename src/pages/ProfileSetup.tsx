@@ -20,7 +20,8 @@ export const ProfileSetup: React.FC = () => {
     isFounder: false,
     companyName: '',
     location: '',
-    qualification: ''
+    qualification: '',
+    whoYouAre: ''
   });
   const [newSkill, setNewSkill] = useState('');
   const [loading, setLoading] = useState(false);
@@ -69,6 +70,10 @@ export const ProfileSetup: React.FC = () => {
       toast.error('Looking For is required');
       return;
     }
+    if (!formData.whoYouAre) {
+      toast.error('Who are you? field is required');
+      return;
+    }
     setLoading(true);
     try {
       if (!user) throw new Error('User not found');
@@ -87,6 +92,7 @@ export const ProfileSetup: React.FC = () => {
         location: formData.location || '',
         qualification: formData.qualification || '',
         profileImage: profileImage || undefined,
+        whoYouAre: formData.whoYouAre as any,
       });
       setProfile && setProfile(newProfile);
       toast.success('Profile setup complete!');
@@ -308,6 +314,26 @@ export const ProfileSetup: React.FC = () => {
               className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all text-xs sm:text-base"
               placeholder="Your highest qualification"
             />
+          </div>
+          <div>
+            <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">
+              Who are you?
+            </label>
+            <select
+              value={formData.whoYouAre}
+              onChange={e => setFormData(prev => ({ ...prev, whoYouAre: e.target.value }))}
+              className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all text-xs sm:text-base"
+              required
+            >
+              <option value="">Select who you are</option>
+              <option value="student">Student</option>
+              <option value="entrepreneur">Entrepreneur</option>
+              <option value="founder">Founder</option>
+              <option value="employee">Employee</option>
+              <option value="company">Company</option>
+              <option value="advertisement">Advertisement</option>
+              <option value="newspage">Newspage</option>
+            </select>
           </div>
           <div className="flex items-center gap-2">
             <input
