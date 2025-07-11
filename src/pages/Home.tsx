@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import {  Handshake, Users, MessageCircle, Zap, Star, ArrowRight, ArrowLeft } from 'lucide-react';
+import {  Handshake, Users, MessageCircle, Star, ArrowRight, ArrowLeft } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
@@ -213,29 +213,29 @@ export const Home: React.FC = () => {
 const reviews = [
   {
     username: 'Namita K',
-    profileImage: 'https://randomuser.me/api/portraits/women/44.jpg',
+    profileImage: 'https://plus.unsplash.com/premium_photo-1682089810582-f7b200217b67?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     company: 'TechNova',
     review: 'Foundrr helped me find the perfect technical co-founder. We launched our startup in just 3 months!',
     rating: 5
   },
   {
     username: 'Raj Sharma',
-    profileImage: 'https://randomuser.me/api/portraits/men/32.jpg',
+    profileImage:'https://images.unsplash.com/photo-1607346256330-dee7af15f7c5?q=80&w=2106&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     company: '',
     lookingFor: 'Business Co-founder',
     review: 'I was looking for a business partner and found someone who shares my vision. Highly recommended!',
     rating: 4
   },
   {
-    username: 'PriyaS',
-    profileImage: 'https://randomuser.me/api/portraits/women/68.jpg',
+    username: 'Priya M',
+    profileImage: 'https://images.unsplash.com/photo-1709976613164-ce55b279c87b?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     company: 'EduSpark',
     review: 'The matching algorithm is spot on. We connected, built a team, and got funded!',
     rating: 5
   },
   {
-    username: 'MikeD',
-    profileImage: 'https://randomuser.me/api/portraits/men/85.jpg',
+    username: 'Rahul S',
+    profileImage: 'https://images.unsplash.com/photo-1729157661483-ed21901ed892?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     company: '',
     lookingFor: 'Technical Co-founder',
     review: 'Great platform for serious founders. The community is supportive and active.',

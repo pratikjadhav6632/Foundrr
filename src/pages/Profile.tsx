@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useAuth } from '../contexts/AuthContext';
-import { Edit3, MapPin, Briefcase, Star, Mail, User, Save, X, Image as ImageIcon,Trash2, UserPlus, UserMinus, BookOpen, Search, Building2, Heart, MessageCircle } from 'lucide-react';
+import { Edit3, MapPin, Briefcase, Star, Mail, User, Save, X, Image as ImageIcon,Trash2,  BookOpen, Search, Building2, Heart, MessageCircle } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { uploadToCloudinary } from '../services/cloudinaryService';
-import { useNavigate, useParams, Link } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { LogOut } from 'lucide-react';
 import { profileService } from '../services/profileService';
 import { matchService } from '../services/matchService';
@@ -27,6 +27,7 @@ export const Profile: React.FC = () => {
   const [publicProfile, setPublicProfile] = React.useState<any>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [editData, setEditData] = useState({
+    username: profile?.username || '',
     bio: profile?.bio || '',
     skills: profile?.skills || [],
     lookingFor: profile?.lookingFor || '',
@@ -50,7 +51,10 @@ export const Profile: React.FC = () => {
 
   useEffect(() => {
     if (userId) {
-      profileService.getProfile(userId).then(setPublicProfile);
+      profileService.getProfile(userId).then(profile => {
+        setPublicProfile(profile);
+        console.log('Loaded publicProfile:', profile); // Debug log
+      });
       if (user && userId === user.$id) {
         account.get().then(appwriteUser => setPublicEmail(appwriteUser.email)).catch(() => setPublicEmail(null));
       } else {
@@ -84,7 +88,7 @@ export const Profile: React.FC = () => {
 
   const handleSave = async () => {
     try {
-      await updateProfile(editData);
+      await updateProfile(editData); // username is included in editData
       setIsEditing(false);
       toast.success('Profile updated successfully!');
     } catch (error) {
@@ -280,7 +284,7 @@ export const Profile: React.FC = () => {
                     )}
                   </div>
                   <div className="text-white profile-card">
-                    <h1 className="text-2xl font-bold">{user.name}</h1> 
+                    <h1 className="text-2xl font-bold">{profile?.username || user.name || profile?.name || "notfound"}</h1>
 
                     <div className="flex items-center space-x-2 text-purple-100">
                       <Mail className="w-4 h-4" />
@@ -344,6 +348,20 @@ export const Profile: React.FC = () => {
           {/* Content - only show when editing */}
           {isEditing ? (
             <div className="p-6 space-y-6">
+              {/* Username (editable) */}
+              <div className="flex items-center space-x-3 p-4 bg-gray-50 rounded-lg">
+                <User className="w-5 h-5 text-purple-600" />
+                <div>
+                  <p className="text-sm text-gray-500">Username</p>
+                  <input
+                    type="text"
+                    value={editData.username}
+                    onChange={e => setEditData(prev => ({ ...prev, username: e.target.value }))}
+                    className="font-semibold w-32 px-2 py-1 border border-gray-300 rounded"
+                    placeholder="Enter your username"
+                  />
+                </div>
+              </div>
               {/* Basic Info */}
               <div className="grid md:grid-cols-3 gap-4 ">
                 {/* Age */}

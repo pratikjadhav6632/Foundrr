@@ -168,6 +168,15 @@ async getCurrentUser() {
     }
   }
 
+  async updateName(newName: string) {
+    try {
+      return await account.updateName(newName);
+    } catch (error: any) {
+      console.error('Error updating Appwrite user name:', error);
+      throw new Error(error.message || 'Failed to update user name');
+    }
+  }
+
   // Test connection method
   async testConnection() {
     try {

@@ -149,15 +149,22 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     if (!user) return;
 
     try {
+      // If name is being updated and is different from Appwrite user, update Appwrite user name
+      if (profileData.name && profileData.name !== user.name) {
+        await authService.updateName(profileData.name);
+        // Refresh user object from Appwrite
+        const updatedUser = await authService.getCurrentUser();
+        setUser(updatedUser as User);
+      }
       if (profile) {
         // Update existing profile
-        const updatedProfile = await profileService.updateProfile(profile.$id, { ...profileData, name: user.name });
+        const updatedProfile = await profileService.updateProfile(profile.$id, { ...profileData, name: profileData.name || user.name });
         setProfile(updatedProfile);
       } else {
         // Create new profile
         const newProfile = await profileService.createProfile({
           ...profileData,
-          name: user.name,
+          name: profileData.name || user.name,
           userId: user.$id
         });
         setProfile(newProfile);
