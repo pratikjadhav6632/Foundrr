@@ -214,31 +214,43 @@ const reviews = [
   {
     username: 'Namita K',
     profileImage: 'https://plus.unsplash.com/premium_photo-1682089810582-f7b200217b67?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-    company: 'TechNova',
-    review: 'Foundrr helped me find the perfect technical co-founder. We launched our startup in just 3 months!',
+    location:"Pune",
+    review: 'Being non-tech, it’s hard to find the right tech co-founder. This gives me actual hope.',
     rating: 5
   },
   {
     username: 'Raj Sharma',
     profileImage:'https://images.unsplash.com/photo-1607346256330-dee7af15f7c5?q=80&w=2106&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-    company: '',
-    lookingFor: 'Business Co-founder',
-    review: 'I was looking for a business partner and found someone who shares my vision. Highly recommended!',
+    location:"Indore",
+    review: 'Matched with 2 people who genuinely vibe with my vision. Let’s see where it goes!',
     rating: 4
   },
   {
     username: 'Priya M',
     profileImage: 'https://images.unsplash.com/photo-1709976613164-ce55b279c87b?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-    company: 'EduSpark',
-    review: 'The matching algorithm is spot on. We connected, built a team, and got funded!',
+    location:"Udaypur",
+    review: 'Didn’t think something like this existed for people outside metro cities. Respect!',
     rating: 5
   },
   {
-    username: 'Rahul S',
+    username: 'Rahul P',
     profileImage: 'https://images.unsplash.com/photo-1729157661483-ed21901ed892?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-    company: '',
-    lookingFor: 'Technical Co-founder',
-    review: 'Great platform for serious founders. The community is supportive and active.',
+    location:"Nashik",
+    review: 'Been in the startup loop for 3 years — this is the first platform that feels right.',
+    rating: 4
+  },
+  {
+    username: 'Sohel S',
+    profileImage: 'https://images.unsplash.com/photo-1570472050159-7c0ab6f219b0?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    location:"Mumbai",
+    review: 'The Unfiltered Zone is such a refreshing idea. Raw conversations > forced networking.',
+    rating: 4
+  },
+  {
+    username: 'Shweta G',
+    profileImage: 'https://images.unsplash.com/photo-1607344557218-cbff0292b830?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    location: 'Pune',
+    review: 'Finally! A platform that actually understands the co-founder struggle. Super clean interface too',
     rating: 4
   }
 ];
@@ -285,7 +297,7 @@ function UserReviewsCarousel() {
         />
         <div className="text-lg font-semibold mb-1">{review.username}</div>
         <div className="text-purple-600 mb-2 text-sm font-medium">
-          {review.company ? review.company : `Looking for: ${review.lookingFor}`}
+          {review.location}
         </div>
         <div className="text-gray-700 mb-4 text-center">"{review.review}"</div>
         <div className="flex items-center gap-1">
