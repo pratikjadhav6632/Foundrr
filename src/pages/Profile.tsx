@@ -43,11 +43,13 @@ export const Profile: React.FC = () => {
   const [newSkill, setNewSkill] = useState('');
   const navigate = useNavigate();
   const [isFriend, setIsFriend] = React.useState<boolean>(false);
+  const [isPending, setIsPending] = React.useState<boolean>(false); // NEW
   const [friendLoading, setFriendLoading] = React.useState(false);
   const [matchId, setMatchId] = React.useState<string | null>(null);
   const [publicEmail, setPublicEmail] = React.useState<string | null>(null);
   const [userPosts, setUserPosts] = useState<any[]>([]);
   const [postsLoading, setPostsLoading] = useState(false);
+  const [hasMatch, setHasMatch] = React.useState<boolean>(false); // NEW
 
   useEffect(() => {
     if (userId) {
@@ -63,7 +65,15 @@ export const Profile: React.FC = () => {
       if (user) {
         matchService.getExistingMatch(user.$id, userId).then(match => {
           setIsFriend(!!(match && match.isMatched));
-          setMatchId(match && match.isMatched ? match.$id : null);
+          setMatchId(match ? match.$id : null);
+          setHasMatch(!!match); // NEW: track if any match exists
+          setIsPending(
+            !!(
+              match &&
+              !match.isMatched &&
+              ((match.user1Id === user.$id && match.user1Liked) || (match.user2Id === user.$id && match.user2Liked))
+            )
+          );
         });
       }
     }
@@ -143,7 +153,18 @@ export const Profile: React.FC = () => {
       // Re-check match status
       const match = await matchService.getExistingMatch(user.$id, userId);
       setIsFriend(!!(match && match.isMatched));
-      setMatchId(match && match.isMatched ? match.$id : null);
+      setMatchId(match ? match.$id : null);
+      setHasMatch(!!match); // NEW
+      setIsPending(
+        !!(
+          match &&
+          !match.isMatched &&
+          ((match.user1Id === user.$id && match.user1Liked) || (match.user2Id === user.$id && match.user2Liked))
+        )
+      );
+      toast.success('Friend request sent!');
+    } catch (error) {
+      toast.error('Failed to send friend request.');
     } finally {
       setFriendLoading(false);
     }
@@ -156,6 +177,8 @@ export const Profile: React.FC = () => {
       await matchService.deleteMatch(matchId);
       setIsFriend(false);
       setMatchId(null);
+      setHasMatch(false); // NEW
+      setIsPending(false); // NEW
     } finally {
       setFriendLoading(false);
     }
@@ -198,7 +221,7 @@ export const Profile: React.FC = () => {
             {/* Friend/Unfriend button */}
             {user && user.$id !== userId && (
               <div className="w-full flex flex-col gap-2 mb-4 profile-action-buttons">
-                {isFriend ? (
+                {hasMatch ? (
                   <button onClick={handleUnfriend} disabled={friendLoading} className="w-full py-2 rounded-full bg-red-100 text-red-700 font-semibold shadow hover:bg-red-200 transition-all">Unfriend</button>
                 ) : (
                   <button onClick={handleAddFriend} disabled={friendLoading} className="w-full py-2 rounded-full bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold shadow hover:from-purple-700 hover:to-blue-700 transition-all">Add Friend</button>
@@ -219,20 +242,26 @@ export const Profile: React.FC = () => {
                 <div className="space-y-3 profile-user-posts">
                   {userPosts.map(post => (
                     <div key={post.$id} className="bg-gradient-to-r from-purple-50 to-blue-50 rounded-xl p-3 shadow flex flex-col gap-1">
+                      {/* User info above post, similar to forum style */}
+                      <div className="flex items-center gap-3 mb-2">
+                        <img
+                          src={getProfileImageUrl(publicProfile?.profileImage)}
+                          alt={publicProfile?.username || publicProfile?.name}
+                          className="w-8 h-8 rounded-full object-cover"
+                          loading="lazy"
+                        />
+                        <span className="font-semibold text-gray-800">{publicProfile?.username || publicProfile?.name}</span>
+                      </div>
                       <div className="font-semibold text-purple-800 text-base line-clamp-1">{post.content?.slice(0, 80) || 'Untitled Post'}</div>
                       <div className="w-full h-40 ">{post.image && (
-                      
-
-                      <img
-                        src={post.image}
-                        alt="Post"
-                        className="rounded-lg h-full sm:max-h-60 mb-2 w-full object-contain "
-                       
-                        loading="lazy"
-                        onError={(e) => { e.currentTarget.style.display = 'none'; }}
-                      />
-                   
-                    )}</div>
+                        <img
+                          src={post.image}
+                          alt="Post"
+                          className="rounded-lg h-full sm:max-h-60 mb-2 w-full object-contain "
+                          loading="lazy"
+                          onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                        />
+                      )}</div>
                       <div className="flex items-center gap-2 text-xs text-gray-500">
                         <Heart className="w-4 h-4" /> {post.likes?.length || 0}
                         <MessageCircle className="w-4 h-4 ml-2" /> {post.commentsCount || 0}

@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Plus, MessageCircle, Heart, Share, TrendingUp, X, Trash2 } from 'lucide-react';
+import { Plus, MessageCircle, Heart, Share, X, Trash2 } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { useAuth } from '../contexts/AuthContext';
 import { forumService } from '../services/forumService';
 import { profileService } from '../services/profileService';
 import { ForumPost, Profile, ForumComment } from '../types';
 import { uploadPostImageToCloudinary } from '../services/cloudinaryService';
-import { useNavigate } from 'react-router-dom';
+
 import { matchService } from '../services/matchService';
 import { messageService } from '../services/messageService';
-import { div } from 'framer-motion/client';
+
 import { getAppwriteFilePreviewUrl } from '../lib/appwrite';
 
 interface PostWithProfile extends ForumPost {
@@ -23,7 +23,7 @@ interface CommentWithProfile extends ForumComment {
 
 export const Forum: React.FC = () => {
   const { user } = useAuth();
-  const navigate = useNavigate();
+
   const [posts, setPosts] = useState<PostWithProfile[]>([]);
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [showNewPost, setShowNewPost] = useState(false);
@@ -275,11 +275,16 @@ export const Forum: React.FC = () => {
     }
   };
 
-  const getProfileImageUrl = (url?: string) => {
+  const getProfileImageUrl = (url?: string | File) => {
     if (!url) return 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png';
-    if (typeof url !== 'string') return 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png';
-    if (url.startsWith('http://') || url.startsWith('https://')) return url;
-    return getAppwriteFilePreviewUrl(url);
+    if (typeof url === 'string') {
+      if (url.startsWith('http://') || url.startsWith('https://')) return url;
+      return getAppwriteFilePreviewUrl(url);
+    }
+    if (url instanceof File) {
+      return URL.createObjectURL(url);
+    }
+    return 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png';
   };
 
   if (loading) {
@@ -492,7 +497,7 @@ export const Forum: React.FC = () => {
                 <img src={getProfileImageUrl(commentModalPost.authorProfile?.profileImage)} alt="Author" className="w-8 h-8 rounded-full object-cover" loading="lazy" />
                 <span className="font-semibold text-gray-800 text-sm sm:text-base">{commentModalPost.authorProfile?.username || commentModalPost.authorProfile?.name}</span>
                 <span className="text-gray-500 text-xs sm:text-sm">{formatTime(commentModalPost.$createdAt)}</span>
-                <span className="bg-purple-100 text-purple-800 px-2 py-1 rounded-full text-xs ml-auto">{commentModalPost.category}</span>
+                <span className="bg-purple-100 text-purple-800 px-2 py-1 rounded-full text-xs">{commentModalPost.category}</span>
               </div>
               <h4 className="text-base sm:text-lg font-bold mb-1">{commentModalPost.title}</h4>
               <p className="text-gray-700 mb-2 text-sm sm:text-base">{commentModalPost.content}</p>

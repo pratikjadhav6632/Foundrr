@@ -117,7 +117,10 @@ export const Notifications: React.FC = () => {
                 key={notif.id}
                 to={notif.link || '#'}
                 className="block bg-white rounded-xl shadow p-3 sm:p-5 flex items-center space-x-3 sm:space-x-4 hover:bg-purple-50 transition"
-                onClick={() => setNotifications((prev) => prev.filter((n) => n.id !== notif.id))}
+                onClick={() => {
+                  setNotifications((prev) => prev.filter((n) => n.id !== notif.id));
+                  window.dispatchEvent(new Event('refresh-notification-counts'));
+                }}
               >
                 <div>{notif.icon}</div>
                 <div className="flex-1 min-w-0">

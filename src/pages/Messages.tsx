@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Send, Search, User, Trash2, Pencil } from 'lucide-react';
+import { Send, Search, Trash2} from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { matchService } from '../services/matchService';
 import { messageService } from '../services/messageService';
 import { profileService } from '../services/profileService';
-import { forumService } from '../services/forumService';
 import { Match, Message, Profile } from '../types';
 import toast from 'react-hot-toast';
 import { Link } from 'react-router-dom';
@@ -46,9 +45,7 @@ export const Messages: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [selectedMessageId, setSelectedMessageId] = useState<string | null>(null);
   const [deletingMessageId, setDeletingMessageId] = useState<string | null>(null);
-  const [editingMessageId, setEditingMessageId] = useState<string | null>(null);
-  const [editMessageValue, setEditMessageValue] = useState<string>('');
-  const [editLoading, setEditLoading] = useState(false);
+  
   const [isTyping, setIsTyping] = useState(false);
   // Responsive: track if chat screen should be shown on mobile
   const [showChatScreen, setShowChatScreen] = useState(false);
@@ -180,6 +177,8 @@ export const Messages: React.FC = () => {
       for (const message of unreadMessages) {
         await messageService.markMessageAsRead(message.$id);
       }
+      // Dispatch event to refresh notification counts
+      window.dispatchEvent(new Event('refresh-notification-counts'));
     } catch (error) {
       console.error('Error loading messages:', error);
     }
@@ -218,29 +217,6 @@ export const Messages: React.FC = () => {
     }
   };
 
-  const handleEditMessage = (messageId: string, content: string) => {
-    setEditingMessageId(messageId);
-    setEditMessageValue(content);
-  };
-
-  const handleSaveEdit = async (messageId: string) => {
-    setEditLoading(true);
-    try {
-      await messageService.updateMessage(messageId, editMessageValue);
-      setMessages(prev => prev.map(msg => msg.$id === messageId ? { ...msg, content: editMessageValue } : msg));
-      setEditingMessageId(null);
-      toast.success('Message updated');
-    } catch (err) {
-      toast.error('Failed to update message');
-    } finally {
-      setEditLoading(false);
-    }
-  };
-
-  const handleCancelEdit = () => {
-    setEditingMessageId(null);
-    setEditMessageValue('');
-  };
 
   const filteredChats = chats.filter(chat => {
     const username = chat.otherUserProfile.username || '';
@@ -264,9 +240,10 @@ export const Messages: React.FC = () => {
     return `${days}d ago`;
   };
 
-  const getProfileImageUrl = (url?: string) => {
-    if (!url) return 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png';
-    if (typeof url !== 'string') return 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png';
+  const getProfileImageUrl = (url?: string): string => {
+    if (!url || typeof url !== 'string') {
+      return 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png';
+    }
     if (url.startsWith('http://') || url.startsWith('https://')) return url;
     return getAppwriteFilePreviewUrl(url);
   };
@@ -317,10 +294,10 @@ export const Messages: React.FC = () => {
                     if (isMobile) setShowChatScreen(true);
                   }}
                 >
-                  <img src={getProfileImageUrl(typeof chat.otherUserProfile.profileImage === 'string' ? chat.otherUserProfile.profileImage : undefined)} alt="User" className="w-11 h-11 rounded-full object-cover border-2 border-purple-100 group-hover:border-purple-300 transition-all" loading="lazy" />
-                  <div className="flex-1 min-w-0">
-                    <div className="font-semibold text-purple-900 truncate text-sm sm:text-base">{chat.otherUserProfile.username || chat.otherUserProfile.name}</div>
-                    <div className="text-purple-400 text-xs truncate">{chat.lastMessage?.content || 'No messages yet.'}</div>
+                  <img src={getProfileImageUrl(typeof chat.otherUserProfile.profileImage === 'string' ? chat.otherUserProfile.profileImage : '')} alt="User" className="w-11 h-11 rounded-full object-cover border-2 border-purple-100 group-hover:border-purple-300 transition-all" loading="lazy" />
+                  <div>
+                    <span className="font-semibold text-lg text-purple-900">{chat.otherUserProfile.username || chat.otherUserProfile.name}</span>
+                    <div className="text-xs text-purple-500">Last active: {formatTime(chat.otherUserProfile.lastActive || "")}</div>
                   </div>
                   {chat.unreadCount > 0 && (
                     <span className="ml-1 bg-gradient-to-r from-pink-500 to-purple-500 text-white text-xs rounded-full px-2 py-0.5 font-bold shadow">{chat.unreadCount}</span>
@@ -350,13 +327,13 @@ export const Messages: React.FC = () => {
                 {(() => {
                   const selectedChatData = chats.find(chat => chat.match.$id === selectedChat);
                   return selectedChatData ? (
-                    <>
-                      <img src={getProfileImageUrl(typeof selectedChatData.otherUserProfile.profileImage === 'string' ? selectedChatData.otherUserProfile.profileImage : undefined)} alt="Profile" className="w-10 h-10 rounded-full object-cover border-2 border-purple-100" />
+                    <Link to={`/profile/${selectedChatData.otherUserProfile.userId}`} style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center', gap: '12px' }}>
+                      <img src={getProfileImageUrl(typeof selectedChatData.otherUserProfile.profileImage === 'string' ? selectedChatData.otherUserProfile.profileImage : '')} alt="Profile" className="w-10 h-10 rounded-full object-cover border-2 border-purple-100" />
                       <div>
                         <div className="font-semibold text-purple-900 text-base">{selectedChatData.otherUserProfile.username || selectedChatData.otherUserProfile.name}</div>
                         <div className="text-xs text-purple-400">Last active: {formatTime(selectedChatData.otherUserProfile.lastActive || selectedChatData.otherUserProfile.$updatedAt)}</div>
                       </div>
-                    </>
+                    </Link>
                   ) : null;
                 })()}
               </div>
@@ -386,36 +363,27 @@ export const Messages: React.FC = () => {
                             className={`flex ${isMe ? 'justify-end' : 'justify-start'} items-end gap-2 mb-${isLastInGroup ? '4' : '1'} group relative`}
                           >
                             {!isMe && isFirstInGroup && (
-                              <img src={getProfileImageUrl(typeof (() => {
-                                const chat = chats.find(c => c.match.$id === selectedChat);
-                                const img = chat?.otherUserProfile.profileImage;
-                                return typeof img === 'string' ? img : undefined;
-                              })() === 'string' ? (() => {
-                                const chat = chats.find(c => c.match.$id === selectedChat);
-                                const img = chat?.otherUserProfile.profileImage;
-                                return typeof img === 'string' ? img : undefined;
-                              })() : undefined)} alt="User" className="w-8 h-8 rounded-full object-cover border-2 border-purple-100 mb-1" loading="lazy" />
+                              <img src={getProfileImageUrl((() => { const chat = chats.find(c => c.match.$id === selectedChat); const img = chat?.otherUserProfile.profileImage; return typeof img === 'string' ? img : ''; })() || '')} alt="User" className="w-8 h-8 rounded-full object-cover border-2 border-purple-100 mb-1" loading="lazy" />
                             )}
-                            <div className={`flex flex-col items-${isMe ? 'end' : 'start'} w-full max-w-[70%]`}>
+                            <div className={`relative flex flex-col items-${isMe ? 'end' : 'start'} w-full max-w-[70%]`}>
                               <div className={`rounded-2xl px-4 py-2 ${isMe ? 'bg-gradient-to-r from-purple-600 to-blue-600 text-white' : 'bg-white text-purple-900 border border-purple-100'} ${isFirstInGroup ? '' : 'rounded-tl-none rounded-tr-none'} shadow-md mb-0.5`} style={{borderTopLeftRadius: isMe ? '1rem' : isFirstInGroup ? '1rem' : '0.5rem', borderTopRightRadius: !isMe ? '1rem' : isFirstInGroup ? '1rem' : '0.5rem'}}>
                                 <span className="break-words whitespace-pre-line text-sm leading-relaxed">{renderMessageContent(msg.content)}</span>
+                                {isMe && (
+                                  <button
+                                    className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity p-1 rounded hover:bg-pink-100"
+                                    title="Delete message"
+                                    onClick={() => handleDeleteMessage(msg.$id)}
+                                    disabled={deletingMessageId === msg.$id}
+                                    style={{ zIndex: 2 }}
+                                  >
+                                    <Trash2 className={`w-4 h-4 ${deletingMessageId === msg.$id ? 'animate-spin text-purple-200' : 'text-pink-500'}`} />
+                                  </button>
+                                )}
                               </div>
                               {isLastInGroup && (
                                 <span className="text-xs text-purple-300 mt-1 mb-1">{formatTime(msg.$createdAt)}</span>
                               )}
                             </div>
-                            {/* Delete button for own messages, outside the bubble */}
-                            {isMe && (
-                              <button
-                                className="opacity-0 group-hover:opacity-100 transition-opacity p-1 rounded hover:bg-pink-100 ml-1 self-center"
-                                title="Delete message"
-                                onClick={() => handleDeleteMessage(msg.$id)}
-                                disabled={deletingMessageId === msg.$id}
-                              >
-                                <Trash2 className={`w-4 h-4 ${deletingMessageId === msg.$id ? 'animate-spin text-purple-200' : 'text-pink-500'}`} />
-                              </button>
-                            )}
-                            {isMe && <div className="w-8 h-8" />}
                           </motion.div>
                         );
                       })}
@@ -450,7 +418,7 @@ export const Messages: React.FC = () => {
                   }}
                   className="flex-1 px-3 py-2 rounded-full border border-purple-200 focus:ring-2 focus:ring-purple-400 focus:border-transparent text-sm sm:text-base bg-purple-50 placeholder:text-purple-300 messages-input"
                   placeholder="Type your message..."
-                  disabled={editLoading}
+                 
                 />
                 <button
                   onClick={handleSendMessage}

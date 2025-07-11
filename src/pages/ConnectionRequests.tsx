@@ -50,6 +50,8 @@ export const ConnectionRequests: React.FC = () => {
       await matchService.acceptRequest(matchId);
       toast.success('Connection accepted!');
       loadRequests();
+      // Dispatch event to refresh notification counts
+      window.dispatchEvent(new Event('refresh-notification-counts'));
     } catch (error) {
       toast.error('Failed to accept connection');
     }

@@ -14,13 +14,18 @@ export const Navbar: React.FC = () => {
   const [unreadMessages, setUnreadMessages] = React.useState(0);
 
   React.useEffect(() => {
-    if (!user) {
-      setPendingRequests(0);
-      setUnreadMessages(0);
-      return;
-    }
-    matchService.getPendingRequests(user.$id).then(reqs => setPendingRequests(reqs.length));
-    messageService.getUnreadCount(user.$id).then(count => setUnreadMessages(count));
+    const refreshCounts = () => {
+      if (!user) {
+        setPendingRequests(0);
+        setUnreadMessages(0);
+        return;
+      }
+      matchService.getPendingRequests(user.$id).then(reqs => setPendingRequests(reqs.length));
+      messageService.getUnreadCount(user.$id).then(count => setUnreadMessages(count));
+    };
+    refreshCounts(); // Fetch counts on mount/user change
+    window.addEventListener('refresh-notification-counts', refreshCounts);
+    return () => window.removeEventListener('refresh-notification-counts', refreshCounts);
   }, [user]);
 
 

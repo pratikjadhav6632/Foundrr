@@ -77,9 +77,7 @@ export class ProfileService {
         Query.notEqual('userId', currentUserId),
         Query.limit(limit)
       ];
-      if (filters.location) {
-        queries.push(Query.equal('location', filters.location));
-      }
+      // Remove location filter from query, will filter in JS for case-insensitivity
       if (filters.interestedField) {
         queries.push(Query.equal('interestedField', filters.interestedField));
       }
@@ -88,7 +86,15 @@ export class ProfileService {
         COLLECTIONS.PROFILES,
         queries
       );
-      return profiles.documents as unknown as Profile[];
+      let resultProfiles = profiles.documents as unknown as Profile[];
+      // Case-insensitive, partial match location filter in JS
+      if (filters.location) {
+        const filterLocation = filters.location.trim().toLowerCase();
+        resultProfiles = resultProfiles.filter(profile =>
+          profile.location && profile.location.trim().toLowerCase().includes(filterLocation)
+        );
+      }
+      return resultProfiles;
     } catch (error) {
       console.error('Error getting profiles for matching:', error);
       return [];
