@@ -93,7 +93,7 @@ export const ConnectionRequests: React.FC = () => {
                   <a href={`/profile/${requesterProfile.userId}`} className="text-xl font-semibold text-gray-800 hover:underline">
                     {requesterProfile.username || requesterProfile.name || 'Anonymous'}
                   </a>
-                  <p className="text-gray-600">{requesterProfile.bio}</p>
+                  <p className="text-gray-600">{requesterProfile.interestedField}</p>
                 </div>
                 <button
                   onClick={() => handleAccept(match.$id)}

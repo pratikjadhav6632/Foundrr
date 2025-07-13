@@ -27,6 +27,8 @@ export const ProfileSetup: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [profileImage, setProfileImage] = useState<File | null>(null);
   const [profileImagePreview, setProfileImagePreview] = useState<string | null>(null);
+  const [bioWordCount, setBioWordCount] = useState(0);
+  const [bioError, setBioError] = useState('');
 
   const navigate = useNavigate();
 
@@ -74,6 +76,20 @@ export const ProfileSetup: React.FC = () => {
       toast.error('Who are you? field is required');
       return;
     }
+    // Validate bio word count
+    const bioWords = formData.bio.trim().split(/\s+/).filter(Boolean);
+    if (bioWords.length < 100) {
+      setBioError('Bio must be at least 100 words.');
+      toast.error('Bio must be at least 100 words.');
+      return;
+    }
+    if (bioWords.length > 140) {
+      setBioError('Bio must be at most 140 words.');
+      toast.error('Bio must be at most 140 words.');
+      return;
+    }
+    setBioError('');
+
     setLoading(true);
     try {
       if (!user) throw new Error('User not found');
@@ -243,14 +259,35 @@ export const ProfileSetup: React.FC = () => {
             <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">
               Bio <span className='text-red-500'>*</span> 
             </label>
-            <textarea
-              value={formData.bio}
-              onChange={(e) => setFormData(prev => ({ ...prev, bio: e.target.value }))}
-              className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all text-xs sm:text-base"
-              placeholder="Tell us about yourself and your entrepreneurial journey..."
-              rows={4}
-              required
-            />
+            <div className="relative">
+              <textarea
+                value={formData.bio}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  const words = value.trim().split(/\s+/).filter(Boolean);
+                  setBioWordCount(words.length);
+                  setFormData(prev => ({ ...prev, bio: value }));
+                  if (words.length < 60) {
+                    setBioError('Bio must be at least 100 words.');
+                  } else if (words.length > 120) {
+                    setBioError('Bio must be at most 140 words.');
+                  } else {
+                    setBioError('');
+                  }
+                }}
+                className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all text-xs sm:text-base pr-16"
+                placeholder="Tell us about yourself and your entrepreneurial journey..."
+                rows={4}
+                required
+                maxLength={2000}
+              />
+              <span className="absolute top-2 right-3 text-xs text-gray-500 select-none">
+                {bioWordCount} / 140
+              </span>
+            </div>
+            {bioError && (
+              <p className="text-red-500 text-xs mt-1">{bioError}</p>
+            )}
           </div>
           <div>
             <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">

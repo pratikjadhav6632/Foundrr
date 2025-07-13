@@ -9,24 +9,33 @@ const Feedback: React.FC = () => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     setLoading(true);
     setStatus('idle');
     try {
-      // Placeholder: send feedback to backend API
-      const res = await fetch('/api/send-feedback', {
+      const formData = new FormData();
+      formData.append('name', form.name);
+      formData.append('email', form.email);
+      formData.append('message', form.message);
+      formData.append('access_key', import.meta.env.VITE_FEEDBACK_ACCESS_KEY);
+      const object = Object.fromEntries(formData);
+      const json = JSON.stringify(object);
+      const res = await fetch('https://api.web3forms.com/submit', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
-      });
-      if (res.ok) {
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: json,
+      }).then((res) => res.json());
+      if (res.success) {
         setStatus('success');
         setForm({ name: '', email: '', message: '' });
       } else {
         setStatus('error');
       }
-    } catch {
+    } catch (error) {
       setStatus('error');
     } finally {
       setLoading(false);
@@ -38,7 +47,7 @@ const Feedback: React.FC = () => {
       <div className="w-full max-w-lg bg-white rounded-3xl shadow-2xl p-8 sm:p-12 flex flex-col items-center">
         <h1 className="text-3xl font-bold text-purple-700 mb-2 text-center">We Value Your Feedback!</h1>
         <p className="text-gray-600 mb-6 text-center">Let us know your thoughts, suggestions, or issues. Your feedback helps us improve Foundrr.</p>
-        <form className="w-full space-y-5" onSubmit={handleSubmit}>
+        <form className="w-full space-y-5" onSubmit={onSubmit}>
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-1">Name</label>
             <input
