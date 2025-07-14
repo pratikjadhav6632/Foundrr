@@ -2,8 +2,8 @@ import React from 'react';
 
 const termsContent = `
 Terms & Conditions:
-Effective Date:
-Last Updated:
+Effective Date:15-july-2025
+Last Updated:15-july-2025
 ________________________________________
 Introduction
 Welcome to Foundrr, a digital platform created for aspiring entrepreneurs, startup founders, and professionals looking to find their perfect co-founder or collaborator. These Terms and Conditions govern your use of the Foundrr website, mobile application, and related services (collectively referred to as the "Platform"). By accessing or using Foundrr, you agree to be bound by these Terms and Conditions. If you do not accept or agree to any of these terms, you must immediately discontinue use of the Platform.

@@ -87,8 +87,8 @@ Email: support@foundrr.co
 
 
 Community Guidelines – Foundrr:
-Effective Date:
-Last Updated:
+Effective Date:15-july-2025
+Last Updated:15-july-2025
 ________________________________________
 Introduction
 At Foundrr, we are building more than just a platform — we are creating a trusted space for entrepreneurs, co-founders, and builders to connect, collaborate, and grow. To maintain a professional, respectful, and inclusive environment, every user must adhere to these Community Guidelines.
@@ -159,8 +159,8 @@ End of Community Guidelines
 
 
 Cookie Policy – Foundrr:
-Effective Date:
-Last Updated:
+Effective Date: 15-july-2025
+Last Updated:15-july-2025
 ________________________________________
 Introduction
 This Cookie Policy explains how Foundrr uses cookies and similar tracking technologies to recognize users when they visit our website or use our platform. It details what these technologies are, why we use them, and how users can control them.
@@ -219,8 +219,8 @@ End of Cookie Policy
 
 
 Data Retention and Deletion Policy – Foundrr:
-Effective Date:
-Last Updated:
+Effective Date:15-july-2025
+Last Updated:15-july-2025
 ________________________________________
 Introduction
 At Foundrr, we recognize the importance of handling personal data responsibly — not only in how it is collected but also in how long it is retained and when it is permanently deleted. This Data Retention and Deletion Policy outlines how long we keep user information, the criteria we use to determine retention periods, and how users can request deletion of their data.
@@ -281,8 +281,8 @@ End of Data Retention and Deletion Policy
 
 
 User Agreement – Foundrr:
-Effective Date:
-Last Updated:
+Effective Date:15-july-2025
+Last Updated:15-july-2025
 ________________________________________
 Introduction
 Welcome to Foundrr. This User Agreement ("Agreement") is a legally binding contract between you ("User," "you," or "your") and Foundrr ("Company," "we," "us," or "our"). By accessing or using the Foundrr platform, including all related services and content, you agree to be bound by this Agreement.
