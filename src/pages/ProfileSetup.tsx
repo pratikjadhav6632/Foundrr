@@ -268,9 +268,9 @@ export const ProfileSetup: React.FC = () => {
                   setBioWordCount(words.length);
                   setFormData(prev => ({ ...prev, bio: value }));
                   if (words.length < 60) {
-                    setBioError('Bio must be at least 100 words.');
+                    setBioError('Bio must be at least 60 words.');
                   } else if (words.length > 120) {
-                    setBioError('Bio must be at most 140 words.');
+                    setBioError('Bio must be at most 120 words.');
                   } else {
                     setBioError('');
                   }
