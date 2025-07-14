@@ -10,6 +10,7 @@ import PostDetail from './pages/PostDetail';
 import Feedback from './pages/Feedback';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import HelpSupport from './pages/HelpSupport';
+import TermsCondition from './pages/TermsCondition';
 
 // Fix lazy imports for named exports
 const Home = lazy(() => import('./pages/Home').then(module => ({ default: module.Home })));
@@ -77,6 +78,7 @@ function App() {
               <Route path="/feedback" element={<Feedback />} />
               <Route path="/privacy-policy" element={<PrivacyPolicy />} />
               <Route path="/help-support" element={<HelpSupport />} />
+              <Route path="/terms-condition" element={<TermsCondition />} />
             </Routes>
           </Suspense>
           <Toaster position="top-right" />

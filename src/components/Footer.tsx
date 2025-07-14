@@ -30,7 +30,7 @@ export const Footer: React.FC = () => {
           <ul className="space-y-2 text-sm">
             <li><Link to="/about" className="hover:underline hover:text-blue-200 transition-colors">About Foundrr</Link></li>
             <li><Link to="/privacy-policy" className="hover:underline hover:text-blue-200 transition-colors">Privacy Policy</Link></li>
-            <li><a href="#terms" className="hover:underline hover:text-blue-200 transition-colors">Terms of Service</a></li>
+            <li><Link to="/terms-condition" className="hover:underline hover:text-blue-200 transition-colors">Terms & Conditions</Link></li>
           </ul>
         </div>
         {/* Contact */}
