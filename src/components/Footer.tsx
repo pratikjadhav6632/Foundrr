@@ -10,7 +10,7 @@ export const Footer: React.FC = () => {
         <div className="flex flex-col space-y-3">
           <div className="flex items-center space-x-3 mb-2">
             <img src={FoundrrIcon} alt="Foundrr Logo" className="h-10 w-10 rounded-full shadow" />
-            <span className="font-bold text-xl tracking-wide">Foundrr.co</span>
+            <span className="font-bold text-xl tracking-wide">Foundrr</span>
           </div>
           <p className="text-sm opacity-90">Connect with co-founders, build your dream startup team, and grow in India’s startup ecosystem.</p>
         </div>

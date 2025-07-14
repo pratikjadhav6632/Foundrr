@@ -5,7 +5,7 @@ import { profileService } from '../services/profileService';
 import { Profile, Match } from '../types';
 import { toast } from 'react-hot-toast';
 import { getAppwriteFilePreviewUrl } from '../lib/appwrite';
-
+import './Profile.css'
 interface RequestData {
   match: Match;
   requesterProfile: Profile;
@@ -81,12 +81,12 @@ export const ConnectionRequests: React.FC = () => {
         ) : (
           <div className="space-y-6">
             {requests.map(({ match, requesterProfile }) => (
-              <div key={match.$id} className="bg-white rounded-xl shadow p-6 flex items-center space-x-4">
+              <div key={match.$id} className="bg-white rounded-xl shadow p-6 flex items-center space-x-4 ">
                 <a href={`/profile/${requesterProfile.userId}`} className="hover:underline">
                   <img
                     src={getProfileImageUrl(typeof requesterProfile.profileImage === 'string' ? requesterProfile.profileImage : undefined)}
                     alt="Profile"
-                    className="w-16 h-16 rounded-full object-cover"
+                    className="w-16 h-16 rounded-full object-cover "
                   />
                 </a>
                 <div className="flex-1">

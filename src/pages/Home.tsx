@@ -43,7 +43,8 @@ export const Home: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            Swipe, Match, Build. The future of entrepreneurship starts with finding the right partner.
+            Swipe, Match, Connect. <br />
+            Build the future of entrepreneurship starts with finding the right partner.
           </motion.p>
           {!user && (
             <motion.div 
@@ -183,7 +184,7 @@ export const Home: React.FC = () => {
           >
             <h2 className="text-2xl sm:text-4xl font-bold text-white mb-4 sm:mb-6">Ready to Find Your Co-Founder?</h2>
             <p className="text-purple-100 text-base sm:text-lg mb-6 sm:mb-8 max-w-md sm:max-w-2xl mx-auto">
-              Join thousands of entrepreneurs who've found their perfect business partner on CoFounderMatch.
+              Join thousands of entrepreneurs who've found their perfect business partner on Foundrr.
             </p>
             {user&&(
             <Link 
