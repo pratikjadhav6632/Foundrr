@@ -44,6 +44,20 @@ export const CoFounderMatch: React.FC = () => {
     
     try {
       setLoading(true);
+      // Get all matched users (friends)
+      const userMatches = await matchService.getUserMatches(user.$id);
+      // Collect all userIds that are already matched (friends)
+      const matchedUserIds = new Set<string>();
+      userMatches.forEach(match => {
+        if (match.user1Id === user.$id) {
+          matchedUserIds.add(match.user2Id);
+        } else {
+          matchedUserIds.add(match.user1Id);
+        }
+      });
+      // Also add self to the exclusion list
+      matchedUserIds.add(user.$id);
+
       const rawProfiles = await profileService.getProfilesForMatching(
         user.$id,
         10,
@@ -84,12 +98,13 @@ export const CoFounderMatch: React.FC = () => {
           return { ...p, name } as Profile;
         })
       );
-      // Filter out company, advertisement, newspage profiles
+      // Filter out company, advertisement, newspage profiles and already matched users
       const filteredProfiles = profilesData.filter(
         (profile) =>
           profile.whoYouAre !== 'company' &&
           profile.whoYouAre !== 'advertisement' &&
-          profile.whoYouAre !== 'newspage'
+          profile.whoYouAre !== 'newspage' &&
+          !matchedUserIds.has(profile.userId)
       );
       // Shuffle the filteredProfiles array using Fisher-Yates algorithm
       for (let i = filteredProfiles.length - 1; i > 0; i--) {
