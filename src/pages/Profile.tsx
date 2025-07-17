@@ -681,7 +681,7 @@ export const Profile: React.FC = () => {
             <ul className="space-y-2 text-sm mt-5 flex flex-row gap-4">
               {/* Social icons stylish */}
               <li className='flex '>
-                <a href="#" aria-label="LinkedIn" className="bg-white/80 hover:bg-blue-100 transition-colors rounded-full p-2 shadow flex items-center justify-center">
+                <a href="https://www.linkedin.com/company/foundrr/" aria-label="LinkedIn" className="bg-white/80 hover:bg-blue-100 transition-colors rounded-full p-2 shadow flex items-center justify-center">
                   <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6">
                     <path d="M16 8a6 6 0 0 1 6 6v5h-4v-5a2 2 0 0 0-4 0v5h-4v-9h4v1.5A4 4 0 0 1 16 8z" stroke="#0A66C2" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                     <rect x="2" y="9" width="4" height="9" rx="2" stroke="#0A66C2" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
@@ -690,14 +690,14 @@ export const Profile: React.FC = () => {
                 </a>
               </li>
               <li>
-                <a href="#" aria-label="Twitter" className="bg-white/80 hover:bg-blue-100 transition-colors rounded-full p-2 shadow flex items-center justify-center">
+                <a href="https://x.com/foundrr278?t=cXc6vYJm8vQ2T-feY_-YnA&s=09" aria-label="Twitter" className="bg-white/80 hover:bg-blue-100 transition-colors rounded-full p-2 shadow flex items-center justify-center">
                   <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6">
                     <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53A4.48 4.48 0 0 0 22.4 1.64a9.09 9.09 0 0 1-2.88 1.1A4.48 4.48 0 0 0 16.5 1c-2.5 0-4.5 2.01-4.5 4.5 0 .35.04.69.1 1.02A12.94 12.94 0 0 1 3 2.1a4.48 4.48 0 0 0-.61 2.27c0 1.56.8 2.94 2.02 3.75A4.48 4.48 0 0 1 2 7.13v.06c0 2.18 1.55 4 3.8 4.42a4.48 4.48 0 0 1-2.02.08c.57 1.78 2.23 3.08 4.2 3.12A9 9 0 0 1 1 19.54a12.94 12.94 0 0 0 7 2.05c8.4 0 13-6.96 13-13v-.59A9.18 9.18 0 0 0 23 3z" stroke="#1DA1F2" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
                 </a>
               </li>
               <li>
-                <a href="#" aria-label="Instagram" className="bg-white/80 hover:bg-pink-100 transition-colors rounded-full p-2 shadow flex items-center justify-center">
+                <a href="https://www.instagram.com/foundrr.co?igsh=djlwcWM1NHlqZnFv" aria-label="Instagram" className="bg-white/80 hover:bg-pink-100 transition-colors rounded-full p-2 shadow flex items-center justify-center">
                   <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6">
                     <rect x="2" y="2" width="20" height="20" rx="5" stroke="#E1306C" strokeWidth="1.5"/>
                     <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" stroke="#E1306C" strokeWidth="1.5"/>
