@@ -78,14 +78,14 @@ export const ProfileSetup: React.FC = () => {
     }
     // Validate bio word count
     const bioWords = formData.bio.trim().split(/\s+/).filter(Boolean);
-    if (bioWords.length < 60) {
-      setBioError('Bio must be at least 60 words.');
-      toast.error('Bio must be at least 60 words.');
+    if (bioWords.length <30) {
+      setBioError('Bio must be at least 30 words.');
+      toast.error('Bio must be at least 30 words.');
       return;
     }
-    if (bioWords.length > 120) {
-      setBioError('Bio must be at most 120 words.');
-      toast.error('Bio must be at most 120 words.');
+    if (bioWords.length > 60) {
+      setBioError('Bio must be at most 60 words.');
+      toast.error('Bio must be at most 60 words.');
       return;
     }
     setBioError('');
@@ -267,10 +267,10 @@ export const ProfileSetup: React.FC = () => {
                   const words = value.trim().split(/\s+/).filter(Boolean);
                   setBioWordCount(words.length);
                   setFormData(prev => ({ ...prev, bio: value }));
-                  if (words.length < 60) {
-                    setBioError('Bio must be at least 60 words.');
+                  if (words.length < 30) {
+                    setBioError('Bio must be at least 30 words.');
                   } else if (words.length > 120) {
-                    setBioError('Bio must be at most 120 words.');
+                    setBioError('Bio must be at most 60 words.');
                   } else {
                     setBioError('');
                   }
