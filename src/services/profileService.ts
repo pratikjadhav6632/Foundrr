@@ -71,7 +71,7 @@ export class ProfileService {
     }
   }
 
-  async getProfilesForMatching(currentUserId: string, limit: number = 10, filters: { location?: string; interestedField?: string } = {}) {
+  async getProfilesForMatching(currentUserId: string, limit: number = 100, filters: { location?: string; interestedField?: string } = {}) {
     try {
       const queries = [
         Query.notEqual('userId', currentUserId),
