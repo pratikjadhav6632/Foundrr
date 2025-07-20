@@ -60,7 +60,7 @@ export const CoFounderMatch: React.FC = () => {
 
       const rawProfiles = await profileService.getProfilesForMatching(
         user.$id,
-        10,
+        100,
         {
           location: locationFilter || undefined,
           interestedField: interestedFieldFilter || undefined
