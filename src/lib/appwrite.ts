@@ -5,8 +5,10 @@ const checkEnvVars = () => {
   const requiredVars = [
     'VITE_APPWRITE_ENDPOINT',
     'VITE_APPWRITE_PROJECT_ID',
+  
     'VITE_APPWRITE_DATABASE_ID'
   ];
+  console.log('Project ID:', import.meta.env.VITE_APPWRITE_PROJECT_ID);
   
   const missing = requiredVars.filter(varName => !import.meta.env[varName]);
   
