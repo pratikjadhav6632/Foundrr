@@ -11,12 +11,23 @@ export const Login: React.FC = () => {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
   const { login, connectionStatus, user, sendPasswordReset } = useAuth();
   const navigate = useNavigate();
   const [loginError, setLoginError] = useState<string | null>(null);
   const [forgotPassword, setForgotPassword] = useState(false);
   const [resetEmailOrMobile, setResetEmailOrMobile] = useState('');
   const [resetSent, setResetSent] = useState(false);
+
+  // On mount, pre-populate remembered email
+  React.useEffect(() => {
+    const remembered = localStorage.getItem('rememberMe');
+    const rememberedEmail = localStorage.getItem('rememberEmail');
+    if (remembered === 'true' && rememberedEmail) {
+      setEmail(rememberedEmail);
+      setRememberMe(true);
+    }
+  }, []);
 
   // Clear error on mount and when user logs in
   React.useEffect(() => {
@@ -39,6 +50,14 @@ export const Login: React.FC = () => {
     setLoading(true);
     try {
       await login(email, password);
+      // Persist remember-me preference
+      if (rememberMe) {
+        localStorage.setItem('rememberMe', 'true');
+        localStorage.setItem('rememberEmail', email);
+      } else {
+        localStorage.removeItem('rememberMe');
+        localStorage.removeItem('rememberEmail');
+      }
       setLoginError(null);
       toast.success('Welcome back!');
       navigate('/match');
@@ -131,7 +150,18 @@ export const Login: React.FC = () => {
               </button>
             </div>
           </div>
-          <div className="flex justify-end">
+          <div className="flex justify-between items-center">
+            {/* Remember Me checkbox */}
+            <label className="inline-flex items-center text-xs sm:text-sm text-gray-700 select-none">
+              <input
+                type="checkbox"
+                checked={rememberMe}
+                onChange={() => setRememberMe(!rememberMe)}
+                className="form-checkbox h-4 w-4 text-purple-600 border-gray-300 mr-2"
+                disabled={loading}
+              />
+              Remember me
+            </label>
             <button
               type="button"
               className="text-xs text-blue-600 hover:underline"
