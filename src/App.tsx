@@ -2,6 +2,7 @@ import React, { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider } from './contexts/AuthContext';
+import { NotificationProvider } from './contexts/NotificationContext';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
@@ -30,61 +31,63 @@ const OtpVerification = lazy(() => import('./pages/OtpVerification').then(module
 function App() {
   return (
     <AuthProvider>
-      <Router>
-        <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50">
-          <Navbar />
-          <Suspense fallback={<div className="flex justify-center items-center h-96"><span>Loading...</span></div>}>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/signup" element={<Signup />} />
-              <Route path="/profile-setup" element={<ProfileSetup />} />
-              <Route path="/verify" element={<VerifyCallback />} />
-              <Route path="/match" element={
-                <ProtectedRoute>
-                  <CoFounderMatch />
-                </ProtectedRoute>
-              } />
-              <Route path="/messages" element={
-                <ProtectedRoute>
-                  <Messages />
-                </ProtectedRoute>
-              } />
-              <Route path="/profile" element={
-                <ProtectedRoute>
-                  <Profile />
-                </ProtectedRoute>
-              } />
-              <Route path="/profile/:userId" element={<Profile />} />
-              <Route path="/forum" element={
-                <ProtectedRoute>
-                  <Forum />
-                </ProtectedRoute>
-              } />
-              <Route path="/requests" element={
-                <ProtectedRoute>
-                  <ConnectionRequests />
-                </ProtectedRoute>
-              } />
-              <Route path="/notifications" element={
-                <ProtectedRoute>
-                  <Notifications />
-                </ProtectedRoute>
-              } />
-              <Route path="/about" element={<AboutFoundrr />} />
-              <Route path="/reset-password" element={<ResetPassword />} />
-              <Route path="/otp-verification" element={<OtpVerification />} />
-              <Route path="/post/:id" element={<PostDetail />} />
-              <Route path="/feedback" element={<Feedback />} />
-              <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-              <Route path="/help-support" element={<HelpSupport />} />
-              <Route path="/terms-condition" element={<TermsCondition />} />
-            </Routes>
-          </Suspense>
-          <Toaster position="top-right" />
-          <Footer />
-        </div>
-      </Router>
+      <NotificationProvider>
+        <Router>
+          <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50">
+            <Navbar />
+            <Suspense fallback={<div className="flex justify-center items-center h-96"><span>Loading...</span></div>}>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/signup" element={<Signup />} />
+                <Route path="/profile-setup" element={<ProfileSetup />} />
+                <Route path="/verify" element={<VerifyCallback />} />
+                <Route path="/match" element={
+                  <ProtectedRoute>
+                    <CoFounderMatch />
+                  </ProtectedRoute>
+                } />
+                <Route path="/messages" element={
+                  <ProtectedRoute>
+                    <Messages />
+                  </ProtectedRoute>
+                } />
+                <Route path="/profile" element={
+                  <ProtectedRoute>
+                    <Profile />
+                  </ProtectedRoute>
+                } />
+                <Route path="/profile/:userId" element={<Profile />} />
+                <Route path="/forum" element={
+                  <ProtectedRoute>
+                    <Forum />
+                  </ProtectedRoute>
+                } />
+                <Route path="/requests" element={
+                  <ProtectedRoute>
+                    <ConnectionRequests />
+                  </ProtectedRoute>
+                } />
+                <Route path="/notifications" element={
+                  <ProtectedRoute>
+                    <Notifications />
+                  </ProtectedRoute>
+                } />
+                <Route path="/about" element={<AboutFoundrr />} />
+                <Route path="/reset-password" element={<ResetPassword />} />
+                <Route path="/otp-verification" element={<OtpVerification />} />
+                <Route path="/post/:id" element={<PostDetail />} />
+                <Route path="/feedback" element={<Feedback />} />
+                <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                <Route path="/help-support" element={<HelpSupport />} />
+                <Route path="/terms-condition" element={<TermsCondition />} />
+              </Routes>
+            </Suspense>
+            <Toaster position="top-right" />
+            <Footer />
+          </div>
+        </Router>
+      </NotificationProvider>
     </AuthProvider>
   );
 }
