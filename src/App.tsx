@@ -2,7 +2,6 @@ import React, { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider } from './contexts/AuthContext';
-import { NotificationProvider } from './contexts/NotificationContext';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
@@ -31,8 +30,7 @@ const OtpVerification = lazy(() => import('./pages/OtpVerification').then(module
 function App() {
   return (
     <AuthProvider>
-      <NotificationProvider>
-        <Router>
+      <Router>
           <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50">
             <Navbar />
             <Suspense fallback={<div className="flex justify-center items-center h-96"><span>Loading...</span></div>}>
@@ -68,7 +66,7 @@ function App() {
                     <ConnectionRequests />
                   </ProtectedRoute>
                 } />
-                <Route path="/notifications" element={
+               <Route path="/notifications" element={
                   <ProtectedRoute>
                     <Notifications />
                   </ProtectedRoute>
@@ -87,7 +85,6 @@ function App() {
             <Footer />
           </div>
         </Router>
-      </NotificationProvider>
     </AuthProvider>
   );
 }
