@@ -1,0 +1,254 @@
+import { createContext, useContext, useEffect, useState, useCallback, useMemo } from 'react';
+import { Client, Account, Databases, Query } from 'appwrite';
+import OneSignal from 'react-onesignal';
+import { DATABASE_ID, COLLECTIONS } from '../lib/appwrite';
+import { 
+  Notification as NotificationType,
+  DatabaseNotification,
+  isDatabaseNotification
+} from '../types/notification';
+
+interface AppNotification extends Omit<NotificationType, 'id' | 'createdAt' | 'read' | 'userId'> {
+  id: string;
+  createdAt: string;
+  read: boolean;
+  userId: string;
+}
+
+interface NotificationContextType {
+  notifications: AppNotification[];
+  unreadCount: number;
+  initializePushNotifications: () => Promise<void>;
+  fetchNotifications: () => Promise<void>;
+  markAsRead: (notificationId: string) => Promise<void>;
+  markAllAsRead: () => Promise<void>;
+  addNotification: (notification: Omit<AppNotification, 'id' | 'createdAt' | 'read' | 'userId'>) => AppNotification;
+  isInitialized: boolean;
+  isLoading: boolean;
+}
+
+const NotificationContext = createContext<NotificationContextType | undefined>(undefined);
+
+export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [notifications, setNotifications] = useState<AppNotification[]>([]);
+  const [isInitialized, setIsInitialized] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  
+  const client = useMemo(() => new Client()
+    .setEndpoint(import.meta.env.VITE_APPWRITE_ENDPOINT)
+    .setProject(import.meta.env.VITE_APPWRITE_PROJECT_ID), []);
+  
+  const databases = useMemo(() => new Databases(client), [client]);
+
+  const unreadCount = useMemo(() => notifications.filter(n => !n.read).length, [notifications]);
+
+  // Fetch notifications from Appwrite
+  const fetchNotifications = useCallback(async () => {
+    try {
+      setIsLoading(true);
+      const account = new Account(client);
+      const user = await account.get();
+      
+      if (!user) return;
+      
+      const response = await databases.listDocuments<DatabaseNotification>(
+        DATABASE_ID,
+        COLLECTIONS.NOTIFICATIONS,
+        [
+          Query.equal('userId', user.$id),
+          Query.orderDesc('$createdAt'),
+          Query.limit(50)
+        ]
+      );
+      
+      const fetchedNotifications = response.documents
+        .filter(isDatabaseNotification)
+        .map(doc => ({
+          id: doc.$id,
+          type: doc.type,
+          title: doc.title,
+          message: doc.message,
+          read: Boolean(doc.read),
+          createdAt: doc.$createdAt,
+          data: doc.data || {},
+          userId: doc.userId
+        } as AppNotification));
+      
+      setNotifications(fetchedNotifications);
+    } catch (error) {
+      console.error('Error fetching notifications:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [client, databases]);
+
+  // Initialize OneSignal
+  const initializePushNotifications = useCallback(async () => {
+    if (isInitialized || typeof window === 'undefined') return;
+
+    try {
+      await OneSignal.init({
+        appId: import.meta.env.VITE_ONESIGNAL_APP_ID,
+        allowLocalhostAsSecureOrigin: true,
+        serviceWorkerPath: '/OneSignalSDKWorker.js',
+      });
+
+      const permission = await OneSignal.Notifications.requestPermission();
+      console.log('Notification permission:', permission);
+      
+      try {
+        const account = new Account(client);
+        const user = await account.get();
+        await OneSignal.login(user.$id);
+        console.log('OneSignal user ID set:', user.$id);
+      } catch (error) {
+        console.log('User not logged in or error getting user:', error);
+      }
+
+      OneSignal.Notifications.addEventListener('click', (event: any) => {
+        console.log('Notification clicked:', event);
+        const notification = event.notification;
+        if (notification?.data?.url) {
+          window.open(notification.data.url, '_blank');
+        } else if (notification?.url) {
+          window.open(notification.url, '_blank');
+        }
+      });
+
+      OneSignal.Notifications.addEventListener('foregroundWillDisplay', (event: any) => {
+        console.log('Notification will display in foreground:', event);
+      });
+
+      await fetchNotifications();
+      setIsInitialized(true);
+      console.log('OneSignal initialized successfully');
+    } catch (error) {
+      console.error('Error initializing OneSignal:', error);
+    }
+  }, [isInitialized, fetchNotifications, client]);
+
+  // Mark a notification as read
+  const markAsRead = useCallback(async (notificationId: string) => {
+    setNotifications(prev =>
+      prev.map(notification =>
+        notification.id === notificationId && !notification.read
+          ? { ...notification, read: true }
+          : notification
+      )
+    );
+    
+    try {
+      await databases.updateDocument(
+        DATABASE_ID,
+        COLLECTIONS.NOTIFICATIONS,
+        notificationId,
+        { read: true }
+      );
+    } catch (error) {
+      console.error('Error marking notification as read:', error);
+      setNotifications(prev =>
+        prev.map(notification =>
+          notification.id === notificationId
+            ? { ...notification, read: false }
+            : notification
+        )
+      );
+    }
+  }, [databases]);
+
+  // Mark all notifications as read
+  const markAllAsRead = useCallback(async () => {
+    const unreadNotifications = notifications.filter(n => !n.read);
+    if (unreadNotifications.length === 0) return;
+    
+    setNotifications(prev =>
+      prev.map(notification => ({
+        ...notification,
+        read: true,
+      }))
+    );
+    
+    try {
+      await Promise.all(
+        unreadNotifications.map(notification => 
+          databases.updateDocument(
+            DATABASE_ID,
+            COLLECTIONS.NOTIFICATIONS,
+            notification.id,
+            { read: true }
+          )
+        )
+      );
+    } catch (error) {
+      console.error('Error marking all notifications as read:', error);
+      setNotifications(prev =>
+        prev.map(notification => ({
+          ...notification,
+          read: unreadNotifications.some(n => n.id === notification.id) 
+            ? false 
+            : notification.read,
+        }))
+      );
+    }
+  }, [notifications, databases]);
+
+  // Add a new notification
+  const addNotification = useCallback((notification: Omit<AppNotification, 'id' | 'createdAt' | 'read' | 'userId'>): AppNotification => {
+    const newNotification: AppNotification = {
+      ...notification,
+      id: Math.random().toString(36).substr(2, 9),
+      createdAt: new Date().toISOString(),
+      read: false,
+      data: notification.data || {},
+      userId: ''
+    };
+
+    setNotifications(prev => [newNotification, ...prev]);
+    return newNotification;
+  }, []);
+
+  // Set up effect for fetching notifications
+  useEffect(() => {
+    if (isInitialized) {
+      fetchNotifications();
+      const interval = setInterval(fetchNotifications, 30000);
+      return () => clearInterval(interval);
+    }
+  }, [isInitialized, fetchNotifications]);
+
+  const contextValue = useMemo(() => ({
+    notifications,
+    unreadCount,
+    initializePushNotifications,
+    fetchNotifications,
+    markAsRead,
+    markAllAsRead,
+    addNotification,
+    isInitialized,
+    isLoading
+  }), [
+    notifications,
+    unreadCount,
+    initializePushNotifications,
+    fetchNotifications,
+    markAsRead,
+    markAllAsRead,
+    addNotification,
+    isInitialized,
+    isLoading
+  ]);
+
+  return (
+    <NotificationContext.Provider value={contextValue}>
+      {children}
+    </NotificationContext.Provider>
+  );
+};
+
+export const useNotifications = () => {
+  const context = useContext(NotificationContext);
+  if (context === undefined) {
+    throw new Error('useNotifications must be used within a NotificationProvider');
+  }
+  return context;
+};

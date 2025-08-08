@@ -26,6 +26,50 @@
     </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Foundrr – Connect with Co-Founders & Build Startups</title>
+    <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js"></script>
+    <script>
+      // Initialize OneSignal with the app ID
+      window.OneSignal = window.OneSignal || [];
+      
+      // This function will be called when OneSignal is ready
+      function onOneSignalReady() {
+        OneSignal.init({
+          appId: "ad57c63d-778a-40c5-b86f-0b3e7fc8fc6f",
+          safari_web_id: "web.onesignal.auto.328b76bd-f95e-4ddf-b873-dc7d80d0ffe4",
+          autoRegister: true, // Automatically prompt for permission
+          notifyButton: {
+            enable: true,
+          },
+          promptOptions: {
+            // Customize the prompt
+            slidedown: {
+              prompts: [
+                {
+                  type: 'push', // Type of prompt
+                  autoPrompt: true, // Automatically prompt for permission
+                  text: {
+                    /* The text for the main message in the prompt */
+                    actionMessage: "We'd like to show you notifications for the latest updates.",
+                    /* The text for the accept button */
+                    acceptButton: 'ALLOW',
+                    /* The text for the cancel button */
+                    cancelButton: 'NO THANKS'
+                  }
+                }
+              ]
+            }
+          }
+        });
+      }
+
+      // If OneSignal is already loaded, initialize it
+      if (window.OneSignal && window.OneSignal.push) {
+        onOneSignalReady();
+      } else {
+        // Otherwise, wait for it to load
+        document.addEventListener('OneSignalInit', onOneSignalReady, false);
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>
