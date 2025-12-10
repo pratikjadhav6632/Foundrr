@@ -77,7 +77,7 @@ export const Navbar: React.FC = () => {
           <span className="ml-1 bg-red-500 text-white text-xs rounded-full px-2 py-0.5">{unreadMessages}</span>
         )}
       </Link>
-      <Link 
+      {/* <Link 
         to="/forum" 
         className={`flex items-center space-x-2 px-3 py-2 rounded-full transition-all ${
           isActive('/forum') ? 'bg-purple-100 text-purple-600' : 'text-gray-600 hover:text-purple-600'
@@ -85,7 +85,7 @@ export const Navbar: React.FC = () => {
       >
         <Users size={20} />
         <span className="inline">Community</span>
-      </Link>
+      </Link> */}
       <Link 
         to="/notifications" 
         className={`flex items-center space-x-2 px-3 py-2 rounded-full transition-all ${

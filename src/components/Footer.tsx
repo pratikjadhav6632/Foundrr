@@ -20,7 +20,7 @@ export const Footer: React.FC = () => {
           <ul className="space-y-2 text-sm ">
             <li><Link to="/" className="hover:underline hover:text-blue-200 transition-colors">Home</Link></li>
             <li><Link to="/match" className="hover:underline hover:text-blue-200 transition-colors">Match</Link></li>
-            <li><Link to="/forum" className="hover:underline hover:text-blue-200 transition-colors">Community</Link></li>
+            {/* <li><Link to="/forum" className="hover:underline hover:text-blue-200 transition-colors">Community</Link></li> */}
             
           </ul>
         </div>

@@ -1,16 +1,18 @@
 import { useEffect, useState } from 'react';
 import { Bell, BellOff, BellRing } from 'lucide-react';
-import { useNotifications } from '../contexts/NotificationContext';
+import { useOneSignal } from '../contexts/OneSignalContext';
 
 const NotificationButton = () => {
   const { 
     unreadCount,
     permissionStatus,
-    requestNotificationPermission
-  } = useNotifications();
+    requestNotificationPermission,
+    isInitialized
+  } = useOneSignal();
   
   const [isLoading, setIsLoading] = useState(true);
   const isSubscribed = permissionStatus === 'granted';
+  const isDenied = permissionStatus === 'denied';
 
   useEffect(() => {
     // Set loading to false once we know the permission status
@@ -39,7 +41,7 @@ const NotificationButton = () => {
   };
 
   // Show loading state
-  if (isLoading) {
+  if (!isInitialized || isLoading) {
     return (
       <button 
         className="relative p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none"
@@ -50,39 +52,47 @@ const NotificationButton = () => {
     );
   }
 
-  // Show appropriate icon based on permission status
-  let icon;
-  let label;
-  
   if (isSubscribed) {
-    icon = (
-      <>
-        <BellRing className="w-6 h-6 text-blue-500" />
-        {unreadCount > 0 && (
-          <span className="absolute top-0 right-0 flex items-center justify-center w-5 h-5 text-xs font-medium text-white bg-red-500 rounded-full">
-            {unreadCount > 9 ? '9+' : unreadCount}
-          </span>
-        )}
-      </>
+    return (
+      <button 
+        onClick={handleToggleNotifications}
+        className="relative p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none"
+        aria-label="Notifications enabled"
+      >
+        <div className="relative">
+          <BellRing className="w-6 h-6 text-blue-500" />
+          {unreadCount > 0 && (
+            <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+              {unreadCount > 9 ? '9+' : unreadCount}
+            </span>
+          )}
+        </div>
+      </button>
     );
-    label = 'Notifications enabled';
-  } else if (permissionStatus === 'denied') {
-    icon = <BellOff className="w-6 h-6 text-gray-400" />;
-    label = 'Notifications blocked. Click to enable in browser settings.';
-  } else {
-    icon = <Bell className="w-6 h-6 text-gray-400" />;
-    label = 'Enable notifications';
+  }
+  
+  if (isDenied) {
+    return (
+      <button 
+        onClick={handleToggleNotifications}
+        className="relative p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none"
+        aria-label="Notifications blocked"
+        title="Notifications are blocked. Click to manage in browser settings."
+      >
+        <BellOff className="w-6 h-6 text-gray-400" />
+      </button>
+    );
   }
 
+  // Default state - notifications not yet requested
   return (
     <button
       onClick={handleToggleNotifications}
       className="relative p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none transition-colors"
-      aria-label={label}
-      title={label}
-      disabled={permissionStatus === 'denied'}
+      aria-label="Enable notifications"
+      title="Click to enable notifications"
     >
-      {icon}
+      <Bell className="w-6 h-6 text-gray-400" />
     </button>
   );
 };

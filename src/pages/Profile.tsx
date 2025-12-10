@@ -601,8 +601,8 @@ export const Profile: React.FC = () => {
             </div>
           ) : (
             <div className="p-6">
-              <h3 className="text-xl font-bold mb-4">Posts</h3>
-              {postsLoading ? (
+              {/* <h3 className="text-xl font-bold mb-4">Posts</h3> */}
+              {/* {postsLoading ? (
                 <div className="flex justify-center py-8"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-500"></div></div>
               ) : userPosts.length === 0 ? (
                 <div className="text-gray-500 text-center py-8">You haven't posted anything yet.</div>
@@ -639,7 +639,7 @@ export const Profile: React.FC = () => {
                     </motion.div>
                   ))}
                 </div>
-              )}
+              )} */}
             </div>
 
           )}

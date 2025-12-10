@@ -1,7 +1,8 @@
-import React, { Suspense, lazy } from 'react';
+import React, { Suspense, lazy, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
-import { AuthProvider } from './contexts/AuthContext';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { OneSignalProvider } from './contexts/OneSignalContext';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
@@ -11,6 +12,7 @@ import Feedback from './pages/Feedback';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import HelpSupport from './pages/HelpSupport';
 import TermsCondition from './pages/TermsCondition';
+import OneSignal from 'react-onesignal';
 
 // Fix lazy imports for named exports
 const Home = lazy(() => import('./pages/Home').then(module => ({ default: module.Home })));
@@ -27,10 +29,37 @@ const AboutFoundrr = lazy(() => import('./pages/AboutFoundrr').then(module => ({
 const ResetPassword = lazy(() => import('./pages/ResetPassword').then(module => ({ default: module.default })));
 const OtpVerification = lazy(() => import('./pages/OtpVerification').then(module => ({ default: module.default })));
 
+// Component to initialize OneSignal after authentication
+const OneSignalInitializer = () => {
+  const { isAuthenticated } = useAuth();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      // Initialize OneSignal when user is authenticated
+      OneSignal.init({
+        appId: import.meta.env.VITE_ONESIGNAL_APP_ID,
+        allowLocalhostAsSecureOrigin: true,
+        serviceWorkerPath: '/OneSignalSDKWorker.js',
+        notifyButton: {
+          enable: true,
+        },
+      }).then(() => {
+        console.log('OneSignal initialized');
+      }).catch(error => {
+        console.error('Error initializing OneSignal:', error);
+      });
+    }
+  }, [isAuthenticated]);
+
+  return null;
+};
+
 function App() {
   return (
     <AuthProvider>
-      <Router>
+      <OneSignalProvider>
+        <OneSignalInitializer />
+        <Router>
           <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50">
             <Navbar />
             <Suspense fallback={<div className="flex justify-center items-center h-96"><span>Loading...</span></div>}>
@@ -66,7 +95,7 @@ function App() {
                     <ConnectionRequests />
                   </ProtectedRoute>
                 } />
-               <Route path="/notifications" element={
+                <Route path="/notifications" element={
                   <ProtectedRoute>
                     <Notifications />
                   </ProtectedRoute>
@@ -85,6 +114,7 @@ function App() {
             <Footer />
           </div>
         </Router>
+      </OneSignalProvider>
     </AuthProvider>
   );
 }

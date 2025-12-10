@@ -16,9 +16,9 @@ export const Home: React.FC = () => {
     {
       icon: <MessageCircle className="w-8 h-8 text-purple-600 mb-2" />, title: 'Real-time Chat', desc: 'Connect instantly with your matches and start building.', to: '/messages'
     },
-    {
-      icon: <Users className="w-8 h-8 text-purple-600 mb-2" />, title: 'Community Forum', desc: 'Share, learn, and grow with other entrepreneurs.', to: '/forum'
-    },
+    // {
+    //   icon: <Users className="w-8 h-8 text-purple-600 mb-2" />, title: 'Community Forum', desc: 'Share, learn, and grow with other entrepreneurs.', to: '/forum'
+    // },
   ];
 
   return (
@@ -115,11 +115,11 @@ export const Home: React.FC = () => {
                 title: "Real-time Chat",
                 description: "Connect instantly with matched co-founders and start building your future together."
               },
-              {
-                icon: <Users className="w-8 h-8" />,
-                title: "Community Forum",
-                description: "Share unfiltered thoughts, get advice, and learn from other entrepreneurs."
-              }
+              // {
+              //   icon: <Users className="w-8 h-8" />,
+              //   title: "Community Forum",
+              //   description: "Share unfiltered thoughts, get advice, and learn from other entrepreneurs."
+              // }
             ].map((feature, index) => (
               <motion.div 
                 key={index}
