@@ -75,7 +75,7 @@ export const Home: React.FC = () => {
               transition={{ duration: 0.8, delay: 0.4 }}
             >
               <div className="text-lg font-semibold text-purple-700 mb-4">Welcome back! What would you like to do?</div>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-2 w-full max-w-3xl">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2 w-full max-w-3xl">
                 {features.map((f, i) => (
                   <div
                     key={f.title}
@@ -103,7 +103,7 @@ export const Home: React.FC = () => {
             </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-8">
             {[
               {
                 icon: < Handshake className="w-8 h-8" />,
@@ -123,7 +123,7 @@ export const Home: React.FC = () => {
             ].map((feature, index) => (
               <motion.div 
                 key={index}
-                className="bg-white/70 backdrop-blur-sm p-6 sm:p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all"
+                className="bg-white/70  backdrop-blur-sm p-6 sm:p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
